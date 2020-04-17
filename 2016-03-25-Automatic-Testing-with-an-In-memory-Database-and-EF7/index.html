@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Automatic Testing With an In-Memory Database and EF7 | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="EF7 introduces two viable options for testing database logic. SQLite in-memory together with code first migrations, and the new InMemory test database.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Automatic Testing With an In-Memory Database and EF7">
+<meta property="og:url" content="https://blog.classon.eu/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="EF7 introduces two viable options for testing database logic. SQLite in-memory together with code first migrations, and the new InMemory test database.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-03-24T23:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:15:50.809Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/" class="article-date">
+  <time datetime="2016-03-24T23:00:00.000Z" itemprop="datePublished">2016-03-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Automatic Testing With an In-Memory Database and EF7
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>If you have ever written automatic tests that runs against a real database, you might have noticed that the tests ran quite slow. To get around this problem, we instead target some kind of fake database which is kept in-memory.</p>
+<p>To my knowledge, you could have done this in two ways while working with Entity Framework (EF).</p>
+<p>One way has been to hide the DbContext behind some kind of abstraction. This makes it possible to replace the DbContext with simple list-objects when running an automatic test. For example the <a href="https://effort.codeplex.com/" target="_blank" rel="noopener">Effort project</a>, or the more simplistic <a href="http://blog.nethouse.se/2015/05/02/nethouse-unit-of-work-pattern/" target="_blank" rel="noopener">Nethouse UoW Pattern</a> use this approach.</p>
+<p>Another way has been to use a SQLite in-memory database, but I have never seen a solution with working code first migrations in EF. At least not until now.</p>
+<h2 id="New-Capabilities-of-Entity-Framework-7"><a href="#New-Capabilities-of-Entity-Framework-7" class="headerlink" title="New Capabilities of Entity Framework 7"></a>New Capabilities of Entity Framework 7</h2><p>With the coming arrival of EF7, code first migrations are finally supported with SQLite. Well? As long as you keep within the <a href="https://docs.efproject.net/en/latest/providers/sqlite/limitations.html" target="_blank" rel="noopener">technical limitations of SQLite</a> that is.</p>
+<p>Another nice feature is the brand new InMemory database. Microsoft designed it to be a <a href="https://docs.efproject.net/en/latest/miscellaneous/testing.html" target="_blank" rel="noopener">general purpose in-memory test replacement</a>. Since it is not a relational database, things like migrations or referential integrity constraints will not work. </p>
+<h2 id="Target-an-In-memory-Database"><a href="#Target-an-In-memory-Database" class="headerlink" title="Target an In-memory Database"></a>Target an In-memory Database</h2><p>It’s relatively straight forward how to configure a DbContext derivate to target either SQLite or InMemory. But the way you configure it in your production code might prevent you do that in your tests. In the case of the .NET framework version of EF, the usual way to configure the DbContext is by overriding a method inside the class.</p>
+<p>So how can you tackle the problem of how to configure the DbContext to use a test database? For instance, you can’t simply solve this by setting up a configurable connection string.</p>
+<p>The InMemory database is a different sort of provider and has to be activated by code. The SQLite in-memory could actually work with just an updated connection string, in theory that is. But a SQLite in-memory database resets each time the connection to it is closed, and the DbContext open and close the connection a lot.</p>
+<p>One could of course do this by adding extra code to the DbContext derivate, where one could inject configuration code to target the test database. But as always, isn’t it a bad practice to keep test code in the production code?</p>
+<p>Luckily, in EF7 it’s possible to configure the DbContext when adding Entity Framework to a <code>ServiceCollection</code> instance.  This configuration is rather verbose, but can without much effort be reused it in all your tests. This is my approach:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Data.Common;</span><br><span class="line"><span class="keyword">using</span> Microsoft.Data.Entity;</span><br><span class="line"><span class="keyword">using</span> Microsoft.Data.Sqlite;</span><br><span class="line"><span class="keyword">using</span> Microsoft.Extensions.DependencyInjection;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">EF.TestUtils</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="title">TestContextFactory</span> : <span class="title">IDisposable</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">private</span> IDisposable _connection;</span><br><span class="line">        <span class="keyword">private</span> IDisposable _scope;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> _index;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="keyword">object</span> Locker = <span class="keyword">new</span> <span class="keyword">object</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> TContext CreateInMemoryDatabase&lt;TContext&gt;() <span class="keyword">where</span> TContext : DbContext</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> serviceCollection = <span class="keyword">new</span> ServiceCollection();</span><br><span class="line">            serviceCollection.AddEntityFramework().AddInMemoryDatabase()</span><br><span class="line">                .AddDbContext&lt;TContext&gt;(c =&gt; c.UseInMemoryDatabase());</span><br><span class="line">            <span class="keyword">var</span> serviceProvider = serviceCollection.BuildServiceProvider();</span><br><span class="line">            <span class="keyword">var</span> scope = serviceProvider.GetRequiredService&lt;IServiceScopeFactory&gt;().CreateScope();</span><br><span class="line">            _scope = scope;</span><br><span class="line">            <span class="keyword">return</span> scope.ServiceProvider.GetService&lt;TContext&gt;();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> TContext CreateInMemorySqlite&lt;TContext&gt;(<span class="keyword">bool</span> migrate = <span class="literal">true</span>) <span class="keyword">where</span> TContext : DbContext</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">string</span> connectionString = CreateSqliteSharedInMemoryConnectionString();</span><br><span class="line">            DbConnection connection = OpenConnectionToKeepInMemoryDbUntilDispose(connectionString);</span><br><span class="line">            <span class="keyword">var</span> dbContext = CreateSqliteDbContext&lt;TContext&gt;(connection);</span><br><span class="line">            <span class="keyword">if</span> (migrate)</span><br><span class="line">                dbContext.Database.Migrate();</span><br><span class="line">            <span class="keyword">return</span> dbContext;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">string</span> <span class="title">CreateSqliteSharedInMemoryConnectionString</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">string</span> name = GetUniqueName();</span><br><span class="line">            <span class="keyword">return</span> <span class="string">$"Data Source=<span class="subst">&#123;name&#125;</span>;Mode=Memory;Cache=Shared"</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">string</span> <span class="title">GetUniqueName</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">lock</span> (Locker)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">$"testdb<span class="subst">&#123;++_index&#125;</span>.db"</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> DbConnection <span class="title">OpenConnectionToKeepInMemoryDbUntilDispose</span>(<span class="params"><span class="keyword">string</span> connectionString</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">var</span> connection = <span class="keyword">new</span> SqliteConnection(connectionString);</span><br><span class="line">            connection.Open();</span><br><span class="line">            _connection = connection;</span><br><span class="line">            <span class="keyword">return</span> connection;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> TContext CreateSqliteDbContext&lt;TContext&gt;(DbConnection connection) <span class="keyword">where</span> TContext : DbContext</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> serviceCollection = <span class="keyword">new</span> ServiceCollection();</span><br><span class="line">            serviceCollection.AddEntityFramework().AddSqlite()</span><br><span class="line">                .AddDbContext&lt;TContext&gt;(c =&gt; c.UseSqlite(connection));</span><br><span class="line">            IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();</span><br><span class="line">            <span class="keyword">var</span> scope = serviceProvider.GetRequiredService&lt;IServiceScopeFactory&gt;().CreateScope();</span><br><span class="line">            _scope = scope;</span><br><span class="line">            <span class="keyword">return</span> scope.ServiceProvider.GetService&lt;TContext&gt;();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Dispose</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            _connection?.Dispose();</span><br><span class="line">            _scope?.Dispose();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Note that my utility class references types from both the <code>EntityFramework.InMemory</code> and <code>EntityFramework.Sqlite</code> NuGet packages. If you have a problem with that you can split up the class, but I find it rather convenient to have both capabilities in a utils-package that I reuse in all my test projects. And since we are dealing with test-code here, I do not think it matters that much if a NuGet-package to much is brought in.</p>
+<p>To make it possible to switch out the DbContext derivative instance when running an automatic test, make sure you inject it in your production code instead of instantiating it there.</p>
+<p>Creating an instance of the DbContext with test configuration can be done similar to this.</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> (<span class="keyword">var</span> factory = <span class="keyword">new</span> TestContextFactory())</span><br><span class="line"><span class="keyword">using</span> (<span class="keyword">var</span> context = factory.CreateInMemorySqlite&lt;MyContext&gt;(migrate: <span class="literal">true</span>))</span><br><span class="line">&#123;</span><br><span class="line">    RunScenario(context);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Or...</span></span><br><span class="line"><span class="keyword">using</span> (<span class="keyword">var</span> factory = <span class="keyword">new</span> TestContextFactory())</span><br><span class="line"><span class="keyword">using</span> (<span class="keyword">var</span> context = factory.CreateInMemoryDatabase&lt;MyContext&gt;())</span><br><span class="line">&#123;</span><br><span class="line">    RunScenario(context);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Avoid-Configuring-Two-Database-Providers-During-Test-Runs"><a href="#Avoid-Configuring-Two-Database-Providers-During-Test-Runs" class="headerlink" title="Avoid Configuring Two Database Providers During Test Runs"></a>Avoid Configuring Two Database Providers During Test Runs</h2><p>If you use the .NET framework version of EF, and override the <code>OnConfiguring</code> method to configure the DbContext, that method will be called even if you inject the configuratoin with help of the <code>TestContextFactory</code>. Therefore it’s a good practice to prevent cofiguration of multiple database providers in the following way.</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">MyContext</span> : <span class="title">DbContext</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnConfiguring</span>(<span class="params">DbContextOptionsBuilder optionsBuilder</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!optionsBuilder.IsConfigured) <span class="comment">// This prevents multiple configurations</span></span><br><span class="line">        &#123;</span><br><span class="line">            optionsBuilder.UseSqlite(<span class="string">@"Data Source=c:\temp\mydatabase.sqlite;"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Entity-Framework-Code-First-Migrations"><a href="#Entity-Framework-Code-First-Migrations" class="headerlink" title="Entity Framework Code First Migrations"></a>Entity Framework Code First Migrations</h2><p>Note that you do not need to run migrations when using an InMemory database. In fact, it does not even support migrations at all. If you want to test migrations, you have to use a real database such as SQLite.</p>
+<p>Migrations are very specific to the type of database that they are written for. This probably makes it a bad idea to test SQL Server migrations on a SQLite database. EF migrations will most likely contain raw scripts when data is affected by the requested change. Remember that the DbContext does not work in a migration? Therefore, you better use the same database technology in your migration tests as you intend to use in your production code.</p>
+<p>When you think about what database to choose, in my opinion, you should definitely consider to use SQLite. Not only because its free of charge, but also because you will have a better testing experience with it. Not all apps need the extra horsepower that SQL server brings.</p>
+<p>A great thing with EF is that your workflow will be quite similar, whatever database you happen to choose. Now go and test that database logic!</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/" data-id="ck93ug7vz000fdsyg9dtucm5w" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Migrating a GitHub Repository to VSTS
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016-03-14-Database-Migration-with-DbUp-and-VSTS/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Database Migration With DbUp and VSTS</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

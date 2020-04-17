@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Migrating a GitHub Repository to VSTS | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="A description of how to use the REST APIs for migrating a GitHub repository to VSTS by copying miilestones and issues into iterations and work items.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Migrating a GitHub Repository to VSTS">
+<meta property="og:url" content="https://blog.classon.eu/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="A description of how to use the REST APIs for migrating a GitHub repository to VSTS by copying miilestones and issues into iterations and work items.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.classon.eu/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/GitHubToVSTS.png">
+<meta property="article:published_time" content="2016-09-01T22:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:00:29.958Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.classon.eu/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/GitHubToVSTS.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-09-02-Migrating-a-GitHub-Repository-to-VSTS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/" class="article-date">
+  <time datetime="2016-09-01T22:00:00.000Z" itemprop="datePublished">2016-09-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Migrating a GitHub Repository to VSTS
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Regarding migrations, I have previous experience with migrating on premise Team Foundation Servers (TFS) to Visual Studio Team Services (VSTS). Those times I used tools such as the <a href="http://opshub.com/products/opshub-visual-studio-migration-utility/" target="_blank" rel="noopener">OpsHub Visual Studio Migration Utility</a> for copying work items and <a href="https://github.com/git-tfs/git-tfs" target="_blank" rel="noopener">Git TFS</a> for migrating source code.</p>
+<p>Yes, you are right. The OpsHub utility can migrate source code as well. But since I’m a fan of Git I thought that I could do the TFVC to Git conversion when I was about to move anyway.</p>
+<p>But enough about TFS-to-VSTS migrations. This post is about how I was trying to figure out how to approach migrating a GitHub repository to VSTS. This time, the problem was not about source code. VSTS has full support for Git, and pushing a Git repository to another remote is trivial. Here is a <a href="http://www.almguide.com/2016/02/10-steps-to-move-a-git-repo-from-github-to-visual-studio-team-services" target="_blank" rel="noopener">random blog post</a> (by Esteban Garcia) about the procedure.</p>
+<h2 id="The-Problem-at-Hand"><a href="#The-Problem-at-Hand" class="headerlink" title="The Problem at Hand"></a>The Problem at Hand</h2><p>What I had to come up with was how to migrate Github Issues and their associated Milestones. The repository I was migrating had not done any Pull Requests, so I could disregard that type of entity completely.</p>
+<p>When I googled around for solutions I found several attempts of using the <a href="https://developer.github.com/v3/" target="_blank" rel="noopener">GitHub REST API</a> to export issues into a CSV-format. In theory, I could use used the Excel TFS plugin to import these CSV-issues into VSTS… But, none of the scripts that I found actually worked the way that I wanted. Not even close.</p>
+<p>So, that left me with the option of doing my own solution. Luckily, that turned out to be a good thing. The result went just the way I wanted it to be.</p>
+<p><img src="./GitHubToVSTS.png" alt="Migrating a GitHub Repository to VSTS"></p>
+<h2 id="Migrating-GitHub-Issues-to-VSTS"><a href="#Migrating-GitHub-Issues-to-VSTS" class="headerlink" title="Migrating GitHub Issues to VSTS"></a>Migrating GitHub Issues to VSTS</h2><p>The grand master plan was to use the GitHub REST API to get the information I needed, and to create iterations and work items through the VSTS REST API. To summarize, milestones were to be converted into iterations, and issues into work items.</p>
+<h3 id="Extracting-Information-from-GitHub"><a href="#Extracting-Information-from-GitHub" class="headerlink" title="Extracting Information from GitHub"></a>Extracting Information from GitHub</h3><p>I started out by making a GET request to list all <a href="https://developer.github.com/v3/issues/#list-issues-for-a-repository" target="_blank" rel="noopener">issues for the GitHub repository</a>, but quickly found out that the result was paginated, and I only got the first 30 or so… I had to repeatedly make requests for the next page, whose URL were hiding behind a <a href="https://tools.ietf.org/html/rfc5988#page-6" target="_blank" rel="noopener">Link-header</a> in the response. It actually took me some time to figure this out, and it was not until I finally read the documentation that I discovered it. Note to self, <a href="https://en.wikipedia.org/wiki/RTFM" target="_blank" rel="noopener">RTFM</a>…</p>
+<p>Then I noticed that most descriptions and comments where formatted in markdown. VSTS need to have its content in bare html, so I needed a way to convert the formatting somehow. Lucky me, the GitHub API has <a href="https://developer.github.com/v3/markdown/#render-a-markdown-document-in-raw-mode" target="_blank" rel="noopener">an endpoint just for that purpose</a>!</p>
+<p>I think its raw <code>text/plain</code> method is really convenient. If I ever find myself in need for markdown conversion once more, I will definitely consider to use the GitHub API again.</p>
+<h3 id="Creating-Work-Items-and-Iterations-in-VSTS"><a href="#Creating-Work-Items-and-Iterations-in-VSTS" class="headerlink" title="Creating Work Items and Iterations in VSTS"></a>Creating Work Items and Iterations in VSTS</h3><p>Now it was time to create some entities in VSTS, and I started with the iterations. The GitHub milestones have both title and description. Iterations just have title, so the description hade to be lost in the migration. Milestones have end date (due date, really) but lacks start date. My approach was that if a milestone had a due date set, I used the date that the milestone was created as start date for the iteration.</p>
+<p>The hardest part was to find the name of the endpoint for iteration creation in the VSTS REST API. After some extensive research, I discovered that areas and iterations are called “<a href="https://www.visualstudio.com/en-us/docs/integrate/api/wit/classification-nodes#create-an-iteration" target="_blank" rel="noopener">classification nodes</a>“ in REST API-language.</p>
+<p>As I tested out creating iterations, I was reminded that <a href="https://www.visualstudio.com/docs/reference/naming-restrictions#area-path-and-iteration-path" target="_blank" rel="noopener">some characters are not allowed in their names</a>. </p>
+<p><em>I find that these restrictions are quite interesting. I can imagine why some characters are not allowed, but there are also naming restrictions. Like for example that an iteration is not allowed to be named COM1 or AUX. How on earth could the backend software be written, if the name of an entity would risk the entity to be mixed up with some random parallel port?</em></p>
+<p>Creating work items was a real breeze. One just compose <a href="https://www.visualstudio.com/en-us/docs/integrate/api/wit/work-items#with-a-work-item-link" target="_blank" rel="noopener">a list of instructions of how the fields and states of the work item should be</a>. The only thing that was a bit troublesome was that if I sent instructions to create several comments on a work item, only the last was actually entered. My solution to that problem was to first create the work item without comments, and then update it once for each comment that needed to be added.</p>
+<p>A very nice feature of the endpoints for creating and updating work items is <a href="https://www.visualstudio.com/en-us/docs/integrate/api/wit/work-items#make-an-update-bypassing-rules" target="_blank" rel="noopener">the bypassRules query parameter</a>. It made it possible for me to both create and update work items while having the original GitHub usernames show up in their history.</p>
+<h2 id="Show-Me-Some-Code-Already"><a href="#Show-Me-Some-Code-Already" class="headerlink" title="Show Me Some Code Already!"></a>Show Me Some Code Already!</h2><p>The script is too long to be included in this blog post (Duh!), but here is <a href="https://github.com/johanclasson/MigrationTools" target="_blank" rel="noopener">a link to a GitHub repository of mine</a> where you can get it, and also read more about the details of what information gets copied.</p>
+<h3 id="Be-Weary-of-Gotchas"><a href="#Be-Weary-of-Gotchas" class="headerlink" title="Be Weary of Gotchas"></a>Be Weary of Gotchas</h3><ul>
+<li>You need to be a member of the VSTS “Project Collection Service Accounts” group to be allowed to use the bypassRules query parameter.</li>
+<li>I used basic authentication to login on GitHub. If you have an account with activated two factor authentication that method will not work for you.</li>
+<li>Only milestones that have issues relating to them are migrated. Empty milestones are not included.</li>
+</ul>
+<h2 id="Lessons-learned"><a href="#Lessons-learned" class="headerlink" title="Lessons learned"></a>Lessons learned</h2><ul>
+<li>Read the documentation.</li>
+<li>Writing custom migration logic is not as hard using REST APIs as with the (dreaded, and outdated) <a href="https://tfsintegration.codeplex.com" target="_blank" rel="noopener">TFS Integration Platform</a> toolkit.</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/" data-id="ck93ug7vz000gdsyg34mze4df" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016-11-14-Implementing-Custom-Tasks-in-VSTS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Implementing Custom Tasks in VSTS
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Automatic Testing With an In-Memory Database and EF7</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

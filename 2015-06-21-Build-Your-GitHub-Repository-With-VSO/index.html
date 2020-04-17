@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Build Your GitHub Repository With VSO | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This post describes how to build your GitHub repository with VSO. A Powershell repo is used to demonstrate doing something completely different in a build.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build Your GitHub Repository With VSO">
+<meta property="og:url" content="https://blog.classon.eu/2015-06-21-Build-Your-GitHub-Repository-With-VSO/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="This post describes how to build your GitHub repository with VSO. A Powershell repo is used to demonstrate doing something completely different in a build.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.classon.eu/2015-06-21-Build-Your-GitHub-Repository-With-VSO/Build-GH-with-VSO-1.1-GitHub-Repo.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-06-21-Build-Your-GitHub-Repository-With-VSO/Build-GH-with-VSO-1.2-GitHub-Access-Token.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-06-21-Build-Your-GitHub-Repository-With-VSO/Build-GH-with-VSO-1.3-GitHub-Build-Steps.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-06-21-Build-Your-GitHub-Repository-With-VSO/Build-GH-with-VSO-1.5-Build-Failed.png">
+<meta property="article:published_time" content="2015-06-20T22:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:20:27.101Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.classon.eu/2015-06-21-Build-Your-GitHub-Repository-With-VSO/Build-GH-with-VSO-1.1-GitHub-Repo.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-06-21-Build-Your-GitHub-Repository-With-VSO" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015-06-21-Build-Your-GitHub-Repository-With-VSO/" class="article-date">
+  <time datetime="2015-06-20T22:00:00.000Z" itemprop="datePublished">2015-06-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Build Your GitHub Repository With VSO
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>If you work with an open source project, or by other means want to share your project with unknown people, GitHub is a great place to store source code. It does not provide any support for building, versioning or deployment, so you have to set these things up somewhere else.</p>
+<p>You can use either Team City, Jenkins or TFS 2015 to host your own build service without so much trouble. If you are not so keen on running your own machine, you can use an online service instead. One of those is Visual Studio Online (VSO), which is my favorite in this case since it’s build agent:</p>
+<ul>
+<li>Integrates well with GitHub.</li>
+<li>Is free to use for <a href="http://azure.microsoft.com/en-us/pricing/details/visual-studio-online/" target="_blank" rel="noopener">60 minutes each month</a>.</li>
+<li>Can be used to build almost anything, and comes bundled with functionality for compiling .Net, Javascript, Ant, Maven, Android, Xamarin, Xcode, among others.</li>
+<li>Is easy to customize for those special needs that you almost always have.</li>
+</ul>
+<p>With the new functionality introduced for TFS 2015, VSO build has become very capable. For a description about what is available read <a href="http://www.colinsalmcorner.com/post/why-you-should-switch-to-build-vnext" target="_blank" rel="noopener">Why You Should Switch to Build VNext, by Colin Dembovsky</a>.</p>
+<p>To demonstrate the ability for customization and doing something completely different in a build, I will use my <a href="https://github.com/johanclasson/PowerShell" target="_blank" rel="noopener">PowerShell repository on GitHub</a> as an example in this post.</p>
+<h2 id="Connecting-VSO-to-GitHub"><a href="#Connecting-VSO-to-GitHub" class="headerlink" title="Connecting VSO to GitHub"></a>Connecting VSO to GitHub</h2><p>If you do not already have an account on visualstudio.com, create one now. Once logged in create a team project representing your GitHub repository.</p>
+<p>In TFS a team project is a container where repositories, work items, source code, and builds are kept.</p>
+<p>Head over to Builds and create a new build definition. Enter your connection details under the Repository tab.</p>
+<p><img src="./Build-GH-with-VSO-1.1-GitHub-Repo.png" alt="GitHub Repo"></p>
+<p>Authorization to GitHub is made through an access token, that can be generated under <a href="http://github.com/settings/tokens" target="_blank" rel="noopener">personal access token on GitHub</a>.</p>
+<p><img src="./Build-GH-with-VSO-1.2-GitHub-Access-Token.png" alt="GitHub Access Token"></p>
+<h2 id="Build-Your-GitHub-Repository-With-VSO"><a href="#Build-Your-GitHub-Repository-With-VSO" class="headerlink" title="Build Your GitHub Repository With VSO"></a>Build Your GitHub Repository With VSO</h2><p>Since I used a PowerShell repository as an example there is nothing to compile in the build, but the purpose is only to run a series of tests.</p>
+<p>To my knowledge, the most used testing framework for PowerShell is <a href="https://github.com/pester/Pester" target="_blank" rel="noopener">Pester</a>. The hosted build agents does not have the Pester module installed. So to be able to run the tests, Pester will first have to be installed. I have written a script for this, and which is explained in more detail later in this post.</p>
+<p>What is performed by a build is configured under the build tab, by adding one of the <a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/overview" target="_blank" rel="noopener">available build steps</a>. Running a series of Pester tests can be done by executing a PowerShell build step.</p>
+<p><img src="./Build-GH-with-VSO-1.3-GitHub-Build-Steps.png" alt="Build Steps to Build Your GitHub Repository With VSO"></p>
+<p>To have the build kick off automatically when changes are pushed to the Repository, configure the build with a Continuous Integration trigger. Use Filters to select what branches will trigger a build. But you can also build your GitHub repository with VSO manually by pressing the <em>Queue build</em> button.</p>
+<h2 id="How-to-Run-Pester-in-VSO"><a href="#How-to-Run-Pester-in-VSO" class="headerlink" title="How to Run Pester in VSO"></a>How to Run Pester in VSO</h2><p><a href="https://gist.github.com/johanclasson/2e4770044f44e8c2fb43" target="_blank" rel="noopener">https://gist.github.com/johanclasson/2e4770044f44e8c2fb43</a></p>
+<h2 id="Build-Result-and-Lessons-Learned"><a href="#Build-Result-and-Lessons-Learned" class="headerlink" title="Build Result and Lessons Learned"></a>Build Result and Lessons Learned</h2><p><img src="./Build-GH-with-VSO-1.5-Build-Failed.png" alt="Build Failed"></p>
+<p>As can be seen, the build failed because 10 tests failed.</p>
+<p>This was actually the first time I executed the tests on another machine than my own. It turned out that some tests weren’t as independent as I thought. And some could not even execute on a Windows Core, which is the operating system used by the VSO hosted build agents.</p>
+<p>Running tests automatically is a good idea, and in this case I learned the hard way that it’s best to start using an external build service from the very beginning. Even for a scripting language.</p>
+<p>One of the modules in my PowerShell repository uses web scraping to get information from a web page, and if the layout changes to much it will no longer work. To alert me when it has broken it is convenient to schedule a build every night and set up an email alert for failed builds.</p>
+<h3 id="Build-Badge"><a href="#Build-Badge" class="headerlink" title="Build Badge"></a>Build Badge</h3><p>VSO and TFS 2015 provides a way for you to present a badge on a website to tell whether you build passes or not.</p>
+<p>To enable this feature you can check the <em>Badge enabled</em> checkbox under the General tab of a build definition. When you save you will get an url to a SVG image.</p>
+<p>Go build something!</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2015-06-21-Build-Your-GitHub-Repository-With-VSO/" data-id="ck93ug7vt0005dsygbn5e1reu" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015-06-26-Pull-Requests-in-TFS-2015/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Pull Requests in TFS 2015
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015-06-01-Hyper-V-Environment-Templating/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hyper-v Environment Templating</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

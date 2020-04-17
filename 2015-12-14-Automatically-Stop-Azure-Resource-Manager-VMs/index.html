@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Automatically Stop Azure Resource Manager VMs | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Use webhooks to automatically stop Azure Resource Manager VMs with runbooks. Examine an example of how this is implemented together with a VSTS build.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Automatically Stop Azure Resource Manager VMs">
+<meta property="og:url" content="https://blog.classon.eu/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="Use webhooks to automatically stop Azure Resource Manager VMs with runbooks. Examine an example of how this is implemented together with a VSTS build.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.classon.eu/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/Create-automation-account.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/Automation-account.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/Build-workflow.png">
+<meta property="article:published_time" content="2015-12-13T23:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:09:03.602Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.classon.eu/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/Create-automation-account.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/" class="article-date">
+  <time datetime="2015-12-13T23:00:00.000Z" itemprop="datePublished">2015-12-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Automatically Stop Azure Resource Manager VMs
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>A question that I get fairly often is how to automatically stop virtual machines in Azure so that they get deallocated and practically does not cost anything. There are many ways to do this, and in this blog post, I am going to describe how to do it with Azure Automation Runbooks.</p>
+<p>The virtual machines that are best suited to automate starting and stopping of, are the ones that does not need to give a response quickly. Test environments, machines with background worker roles, and build infrastructure are some good examples. Production web servers are not, at least not by automation runbooks. Im sure you get that it is wiser to rely on the autoscaling load balancing for those servers instead.</p>
+<h2 id="Different-Approaches-to-Starting-Runbooks"><a href="#Different-Approaches-to-Starting-Runbooks" class="headerlink" title="Different Approaches to Starting Runbooks"></a>Different Approaches to Starting Runbooks</h2><p>Azure has a feature called Automation that can contain runbooks. A runbook is, simply put, a PowerShell script with some extra hosting features such as logging and a platform to run on. Runbooks can be started by schedule, or through a HTTP Post webhook, or if you want to complicate things, by a PowerShell command in another runbook.</p>
+<p>When I first started automating starting and stopping Azure resources I used daily repeating schedules because of their simplicity. But that approach has its limitations. The biggest one is that it is hard to predict when a machine is actually needed. For example, if you schedule your virtual machines to be running monday to friday from say 08:00 to 18:00 you will find that the schedule needs to be tinkered with more often that you think. Vacations, illness, and conferences are are just some occasions where you might have to disable your schedules to save some extra credits.</p>
+<p>The better way would be to start your virtual machines first when they are really needed. And then when they are no longer used, to stop them as soon as you know this. This type of automation can be archived by starting the runbooks primarily by webhooks, and only use repeated schedules as a safety if your webhook automation would happen to fail.</p>
+<p>The possibilities to invoke rest methods are endless. Make your phone call a start VMs webook when it connects to your work WIFI. Make traffic on a web server call a webhook to postpone your stop VMs runbook schedule. You can surely think of other interesting ways.</p>
+<h3 id="Delayed-Webhook-Runbook-Startup"><a href="#Delayed-Webhook-Runbook-Startup" class="headerlink" title="Delayed Webhook Runbook Startup"></a>Delayed Webhook Runbook Startup</h3><p>Schedules does not need to be repeated. In fact, a schedule which is configured to start a runbook only once is a great tool to delay the startup of that runbook after a webhook has been used.</p>
+<h2 id="How-to-Get-Started"><a href="#How-to-Get-Started" class="headerlink" title="How to Get Started"></a>How to Get Started</h2><p>In the Azure portal, you find the Automation account under <em>New - Management</em>.</p>
+<p><img src="./Create-automation-account.png" alt="Create Automation Account"></p>
+<p>To make it possible to reuse PowerShell scripts between automation accounts, It is convenient to link your automation account to a GitHub repository where you can store all your runbook scripts. You can do this by clicking the <em>Set Up Source Control</em> tile, entering your repository details, and then clicking on Sync. This will add a runbook for every PowerShell script, each with the authoring status <em>New</em>. To be able to run one of the imported runbooks, you have to publish it. You can do that by clicking it, then <em>Edit - Publish</em>.</p>
+<p><img src="./Automation-account.png" alt="Automation Account"></p>
+<p>Each automation account has a number of modules by default, which can be found under <em>Assets - Modules</em>. If your PowerShell scripts depend on another module, you can upload it there.</p>
+<p>To make it possible to start a runbook, you click it and then click either <em>Schedule</em> or <em>Webhook</em>. You can then configure any parameters that your PowerShell script needs in that schedule or webhook instance.</p>
+<h2 id="A-Practical-Example"><a href="#A-Practical-Example" class="headerlink" title="A Practical Example"></a>A Practical Example</h2><p>In my Visual Studio Team Services (VSTS) account, I have a project called Akkomation which I use to build a home automation software that I store the <a href="https://github.com/johanclasson/Akkomation" target="_blank" rel="noopener">source code for on GitHub</a> (more about that in a later blog post).</p>
+<p>Each time I check in, a build is triggered in VSTS which runs the tests, and performs analysis on a SonarQube server which I host in Azure.</p>
+<p>Since I am the only contributor to the project code is pushed rather seldom, so it does not make sense to have the SonarQube server up and running 24/7. When I do push, I am often interested to see analysis results such as code coverage and code analysis issues.</p>
+<h3 id="Build-Workflow"><a href="#Build-Workflow" class="headerlink" title="Build Workflow"></a>Build Workflow</h3><p>The build workflow is to first check if the SonarQube server is running, and if not, start it up with a webhook. VSTS includes an <em>Azure Resource Group Deployment</em> task which can start Azure Resource Manager virtual machines. A benefit of starting the SonarQube server with a webhook is that the build can continue while it is booting up.</p>
+<p>Just before the SonarQube analysis begins, the build waits for the service endpoint to come up. Then when the analysis is complete, an runbook which stops the virtual machine is scheduled to start three hours later.</p>
+<p>If another build is triggered before then, the SonarQube server is reused, and the stop runbook is rescheduled to run three hours after that the second build completes.</p>
+<p><img src="./Build-workflow.png" alt="Akkomation Build Workflow"></p>
+<p>This workflow use two custom tasks:</p>
+<ul>
+<li><em>Inline PowerShell</em>, which runs a PowerShell script that is entered in the task instead of running a ps1-file as the normal PowerShell task does. I do not like to check in files in a repo just to make a build workflow possible. At least not in a small project like this one.</li>
+<li><em>Invoke Rest Method</em>, which calls a rest method. Surprise! What it also does is that it tries to invoke it once every ten seconds until it succeeds, up until a configurable timeout. </li>
+</ul>
+<p>You can download both tasks at my <a href="https://github.com/johanclasson/vso-agent-tasks" target="_blank" rel="noopener">vso-agent-tasks repository</a> on GitHub.</p>
+<p>The PowerShell script of the <em>Start SonarQube VM if Not Running</em> task is a simple one. </p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Write-Output</span> <span class="string">"Resetting Stop SonarQube VM runbook schedule."</span></span><br><span class="line"><span class="built_in">Invoke-RestMethod</span> <span class="literal">-Method</span> Post <span class="literal">-Uri</span> <span class="string">"https://s2events.azure-automation.net/webhooks?token=**********"</span> `</span><br><span class="line">    <span class="literal">-Verbose</span> | <span class="built_in">Out-Null</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="built_in">Write-Output</span> <span class="string">"Trying to call SonarQube service..."</span></span><br><span class="line">    <span class="built_in">Invoke-RestMethod</span> <span class="literal">-Method</span> Get <span class="literal">-Uri</span> <span class="string">"http://johanclasson-sonarqube.westeurope.cloudapp.azure.com:9000"</span> `</span><br><span class="line">        <span class="literal">-Verbose</span> | <span class="built_in">Out-Null</span></span><br><span class="line">    <span class="built_in">Write-Output</span> <span class="string">"Found it!"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> &#123;</span><br><span class="line">    <span class="built_in">Write-Output</span> <span class="string">"Nobody seems to be at home... (<span class="variable">$_</span>)"</span></span><br><span class="line">    <span class="built_in">Write-Output</span> <span class="string">"Starting up the virtual machine."</span></span><br><span class="line">    <span class="built_in">Invoke-RestMethod</span> <span class="literal">-Method</span> Post <span class="literal">-Uri</span> <span class="string">"https://s2events.azure-automation.net/webhooks?token=**********"</span> `</span><br><span class="line">        <span class="literal">-Verbose</span> | <span class="built_in">Out-Null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>I hope I have inspired you to do automation of starting and stopping your VMs a little smarter. Best of luck with that!</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/" data-id="ck93ug7vx000bdsyg458be8ra" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016-02-22-How-to-use-Moq-with-.NET-Core-Apps/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          How to Use Moq With .NET Core Apps
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015-12-10-Fight-Technical-Debt-with-SonarQube/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Fight Technical Debt With SonarQube</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

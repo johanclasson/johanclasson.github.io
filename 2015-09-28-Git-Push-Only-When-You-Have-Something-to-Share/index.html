@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Git Push Only When You Have Something to Share | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="It&#39;s a good practice to commit often to your local repository, but invoke the git push only when you have something to share. Keep public repositories tidy!">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git Push Only When You Have Something to Share">
+<meta property="og:url" content="https://blog.classon.eu/2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="It&#39;s a good practice to commit often to your local repository, but invoke the git push only when you have something to share. Keep public repositories tidy!">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2015-09-27T22:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:00:29.919Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share/" class="article-date">
+  <time datetime="2015-09-27T22:00:00.000Z" itemprop="datePublished">2015-09-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Git Push Only When You Have Something to Share
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Git is a source control version system that encourages you to commit changes often. Since you have your own local repository it is not that important that everything that is committed is of premium quality. You can always amend, squach, reword, and even remove commits later before you make your changes public to your team.</p>
+<h2 id="Why-you-should-commit-often"><a href="#Why-you-should-commit-often" class="headerlink" title="Why you should commit often"></a>Why you should commit often</h2><p>It is actually a good practice to commit as soon as you get something right. Even the smallest change that works is best put into history. To commit often brings a few advantages that you would not have anyway:</p>
+<ul>
+<li>You never need to worry that any changes (and even temporary such) are lost if you screw up.</li>
+<li>If you try something out, and it shows that it does not work, you can reset the branch instead of changing back the code manually.</li>
+<li>If you later on realize that a commit is not needed you can rebase and remove that commit from history.</li>
+<li>If you fix something important that someone else in your team suddenly needs, then that person can cherry pick your commit instead of making the change manually.</li>
+<li>? need I go on?</li>
+</ul>
+<h2 id="Git-push-only-when-you-have-something-to-share"><a href="#Git-push-only-when-you-have-something-to-share" class="headerlink" title="Git push only when you have something to share"></a>Git push only when you have something to share</h2><p>Another good practice is that every branch that is public should only contain work that is complete, done, and if you will done-done. For example, one should at any time be able to do a pull request of that work and have it merged into master.</p>
+<p>This makes it super easy for your team members to know what branches they can use to build features of their own upon. Obviously all public branches!</p>
+<p>When using the distributed workflow that git allows, with lots of branches that are often merged all over the place, it?s easy to pick a wrong branch by mistake. The risk of that happening is lower if there are no junk cloading the things that are actually important.</p>
+<p>In other words, invoke the git push only when you have something to share. And that something should be the kind that is worth sharing! Please keep your public repository tidy.</p>
+<h2 id="The-fear-of-hardware-failure"><a href="#The-fear-of-hardware-failure" class="headerlink" title="The fear of hardware failure"></a>The fear of hardware failure</h2><p>One disadvantage of having lots of changes on your local machine is that they can go up in smoke if your computer dies on you. Instead of pushing commits to your public repository you need to address this in another manner.</p>
+<p>You could set up a remote repository and push your changes there to backup. But I would not recommend it. Having more than one remote really is a hazzle! Especially when doing it for backup reasons only.</p>
+<p>One more direct way is to simply do regular copies of your local repositories to a remote location, say a network share, or why not OneDrive? You do not need to copy your checked out branch with binaries and what not. All that is needed is the .git folder.</p>
+<h2 id="PowerShell-to-the-rescue"><a href="#PowerShell-to-the-rescue" class="headerlink" title="PowerShell to the rescue"></a>PowerShell to the rescue</h2><p>My approach is to schedule the following PowerShell to run once each hour. Problem solved!</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">CmdletBinding</span>()]</span><br><span class="line"><span class="keyword">Param</span>(</span><br><span class="line">    [<span class="type">Parameter</span>(<span class="type">Mandatory</span>=<span class="variable">$True</span>)]</span><br><span class="line">    [<span class="built_in">string</span>]<span class="variable">$Source</span>,</span><br><span class="line">    [<span class="type">Parameter</span>(<span class="type">Mandatory</span>=<span class="variable">$True</span>)]</span><br><span class="line">    [<span class="built_in">string</span>]<span class="variable">$Target</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">gci <span class="variable">$Source</span> <span class="literal">-Recurse</span> <span class="literal">-Filter</span> <span class="string">".git"</span> <span class="literal">-Force</span> <span class="literal">-Directory</span> | %&#123;</span><br><span class="line">    <span class="variable">$dir</span> = <span class="built_in">Join-Path</span> (<span class="built_in">Join-Path</span> <span class="variable">$target</span> <span class="variable">$_</span>.Parent.Name) <span class="string">".git"</span></span><br><span class="line">    robocopy <span class="variable">$_</span>.FullName <span class="variable">$dir</span> /MIR | <span class="built_in">Out-Null</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$LASTEXITCODE</span> <span class="operator">-gt</span> <span class="number">7</span>) &#123;</span><br><span class="line">        <span class="built_in">Write-Error</span> <span class="string">"RoboCopy exited with code <span class="variable">$</span>(<span class="variable">$LASTEXITCODE</span>). Something bad happended when taking backup of <span class="variable">$</span>(<span class="variable">$_</span>.Parent.FullName)!"</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"Mirrored content of <span class="variable">$</span>(<span class="variable">$_</span>.FullName) to <span class="variable">$dir</span>"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>For example, I invoke it by <code>.\Backup-Git.ps1 -Source C:\Dev -Target C:\OneDrive\Backup\Git\Rusty</code>. </p>
+<p>I have many computers, and I keep a separate backup folder for each. (One of them is called Rusty?)</p>
+<p>My dev folder contains lots of clones of other people’s repositories which I am not interested in backupping. If you make it a habit to remove their .git folders then they will not get mirrored to your backup destination.</p>
+<p>You can surely think of something else that suites your workflow better! :)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share/" data-id="ck93ug7vu0007dsygb8t32liy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Apply Semantic Versioning to Assemblies
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015-06-26-Pull-Requests-in-TFS-2015/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Pull Requests in TFS 2015</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

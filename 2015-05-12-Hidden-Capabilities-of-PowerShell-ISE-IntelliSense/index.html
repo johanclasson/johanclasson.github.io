@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hidden Capabilities of PowerShell ISE IntelliSense | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="PowerShell ISE IntelliSense works on many things. But what I did not know of until today is that is also works on command history and namespace completion.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hidden Capabilities of PowerShell ISE IntelliSense">
+<meta property="og:url" content="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="PowerShell ISE IntelliSense works on many things. But what I did not know of until today is that is also works on command history and namespace completion.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/powershell-intellisense-ise-normal.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/powershell-intellisense-ise-dash.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/powershell-intellisense-ise-type.png">
+<meta property="article:published_time" content="2015-05-11T22:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:00:29.897Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/powershell-intellisense-ise-normal.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/" class="article-date">
+  <time datetime="2015-05-11T22:00:00.000Z" itemprop="datePublished">2015-05-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Hidden Capabilities of PowerShell ISE IntelliSense
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I do not program in PowerShell daily, but at least once or twice a week. Even though I am far from an expert on the matter, I would like to think of myself as a guy that knows the available commands. </p>
+<p>Normally I have used the PowerShell ISE that comes bundled with Windows Management Framework to edit my scripts. As of late I have been looking around for another IDE, but have not found any that I feel lives up to my expectations.</p>
+<p>I have come to realize that of the capabilities that I value the most, code completion (or ?IntelliSense? as Microsoft calls it) is the most important. When I know the syntax it is relieving to know that what I write is correctly spelled. When I do not know, it is convenient to not have to spam the command prompt with the Get-Command and Get-Member cmdlets.</p>
+<p>Powershell ISE is frankly a quite crappy text editor, but I think it has the best code completion of all PowerShell editors out there. That feature alone makes it a winner.</p>
+<h2 id="How-it-use-PowerShell-ISE-IntelliSense"><a href="#How-it-use-PowerShell-ISE-IntelliSense" class="headerlink" title="How it use PowerShell ISE IntelliSense"></a>How it use PowerShell ISE IntelliSense</h2><p>The IntelliSense menu is often invoked automatically when you write. But if you for example accidently close it, you can get it back by hitting <code>Ctrl + Space</code>.</p>
+<p><img src="./powershell-intellisense-ise-normal.png" alt="An example of Powershell IntelliSense"></p>
+<p>What also works is hitting tab to complete the word to the top suggestion of what is in the IntelliSense list. If it is not what you want you can continue hitting tab to cycle through the suggestions.</p>
+<p>This works on cmdlets, paths, variables, properties and classes of .Net instances, DSC-configuration, and what not. I bet that every PowerShell developer out there are aware. But what at least I did not know of until today is the following two.</p>
+<h3 id="Command-history"><a href="#Command-history" class="headerlink" title="Command history"></a>Command history</h3><p>If you write <code>#</code> followed by <code>Ctrl + Space</code> you get a list of the latest commands which were run in the console.</p>
+<p><img src="./powershell-intellisense-ise-dash.png" alt="Command History with Powershell IntelliSense"></p>
+<p>This is ideal for inserting commands in your script that you have tested out in the console first. Or when writing commands in the console, you can get the history by other means than hitting the arrow keys repeatedly.</p>
+<h3 id="Completion-of-type-namespace"><a href="#Completion-of-type-namespace" class="headerlink" title="Completion of type namespace"></a>Completion of type namespace</h3><p>As a .Net developer I am used to be able to include all types in a namespace of a resource with the using-statement. Unfortunately, there exist no equivalent in PowerShell. This was a real PITA. At least for me, up until today.</p>
+<p>Powershell IntelliSense can type out the namespace of a type for you. Simply write the class name followed by <code>Ctrl + Space</code> and magic happens.</p>
+<p><img src="./powershell-intellisense-ise-type.png" alt="Type Namespace Completion with PowerShell"></p>
+<p>In this case <code>[messagebox</code> will be expanded to <code>[System.Windows.Forms.MessageBox</code>. Not that I actually would like to use a WinForms message box in a PowerShell script, but this is just a stupid example.</p>
+<p>To use this functionality with class libraries you have written yourself you need to first import them with either <code>Add-Type</code> or <code>[System.Reflection.Assembly]::Load*</code>-methods.</p>
+<p>I thought this was absolutely thrilling, and I hope you will find it interesting at least! :)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/" data-id="ck93ug7vp0001dsyge0dc8rdx" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Avoid Connection String Transforms With SQL Client Alias
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015-05-06-WCF-Service-Hosting-made-Easy/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">WCF Service Hosting Made Easy</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

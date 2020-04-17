@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Share Code With Your Own NuGet Feeds | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="To simplify sharing of code which is not yet released, you should use your own NuGet feeds. There are many options for how this can be done with VSTS.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Share Code With Your Own NuGet Feeds">
+<meta property="og:url" content="https://blog.classon.eu/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="To simplify sharing of code which is not yet released, you should use your own NuGet feeds. There are many options for how this can be done with VSTS.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.classon.eu/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/UpdatedNuGetPublisherTask.png">
+<meta property="article:published_time" content="2015-11-26T23:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:04:39.703Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.classon.eu/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/UpdatedNuGetPublisherTask.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/" class="article-date">
+  <time datetime="2015-11-26T23:00:00.000Z" itemprop="datePublished">2015-11-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Share Code With Your Own NuGet Feeds
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I think most of us are familiar with what NuGet is, and how it can be used to add packages from the official NuGet feed to our projects. We can all agree on that It is a real convenient way of sharing code.</p>
+<p>What is strange is that I seldom find projects that use NuGet to share code within the project. Other more ad-hoc solutions are used instead. Have you ever opened a solution in Visual Studio to find that one of the projects that is listed in the solution is also included in an other solution? If you have, you might also have suffered from:</p>
+<ul>
+<li><em>Missing dependent projects</em>: If adding a project as a reference to another in one solution it is easy to forget adding the referenced project to all solutions where it is now needed.</li>
+<li><em>Long relative paths which include the branch or repository name</em>: This the just awful! No, I do not make this up. I have seen it happen more than once… Your project will no longer be able to build or use any branch strategy.</li>
+<li><em>NuGet packages which will not restore on build:</em> NuGet packages are restored to the packages folder. By default this folder is located where the solution file is. If a project has references to DLLs in a packages folder different than the packages folder of your current solution, you will not be able to build if you have to triggered a NuGet restore on that other solution beforehand.</li>
+</ul>
+<p>Another (bad) solution to the problem of sharing code is to simply copy it to all locations where one needs it. This might seem easy, but it makes it very hard to manage future updates to the shared code.</p>
+<p>My observation is that many, if not all, developers consume NuGet feeds (at least the official one), but surprisingly few produce their own.</p>
+<h2 id="Why-You-Should-Share-Code-With-Your-Own-NuGet-Feeds"><a href="#Why-You-Should-Share-Code-With-Your-Own-NuGet-Feeds" class="headerlink" title="Why You Should Share Code With Your Own NuGet Feeds"></a>Why You Should Share Code With Your Own NuGet Feeds</h2><p>There are many reasons for not publishing packages directly to the official NuGet feed.</p>
+<ul>
+<li>If you do not like your packages to be public, obviously.</li>
+<li>It does not make sense to publish packages from your CI builds.</li>
+<li>If you publish packages that does not work, you will get bad-will from people that get an opportunity to use them.</li>
+<li>Once packages are published in the official feed, they cannot be deleted. To correct a mistake in a published package you have to publish a new one with a higher version instead.</li>
+</ul>
+<p>A better solution is to use your own NuGet feed, where you have more control over which packages exist and who that can access them. Perhaps it does not even make sense to make a package available to everyone. But if it does, it is a good idea to only push it to the official NuGet feed once the package has been verified in your own feed first.</p>
+<h2 id="Feed-Hosting-Alternatives"><a href="#Feed-Hosting-Alternatives" class="headerlink" title="Feed Hosting Alternatives"></a>Feed Hosting Alternatives</h2><p>There are many ways you can host a NuGet feed. You should use the one that seems like the best depending on your project needs.</p>
+<p>NuGet supports two types of security. To prevent anyone from pushing packages to your feed you can set an API key, which is a simple password that will be required to provide in the push command. To prevent anyone from consuming your feed, NuGet relies on authentication. For the most part basic authentication is used, although single-sign on with active directory is also possible.</p>
+<p>Of course, if you really want to, you can customize NuGet to also use authentication for pushing packages. For example, this would be the case if you only want users belonging to a special group to be able to contribute to a feed.</p>
+<h3 id="On-Premise-File-Share"><a href="#On-Premise-File-Share" class="headerlink" title="On Premise - File Share"></a>On Premise - File Share</h3><p>A fast and easy way to get started is to simply put the packages in a folder which is shared within your project. NuGet calls this a Local Feed.</p>
+<p>Good:</p>
+<ul>
+<li>Everyone knows how to put files in a folder.</li>
+</ul>
+<p>Bad:</p>
+<ul>
+<li>File shares are typically not suited for public distribution.</li>
+<li>If you use Visual Studio Team Services (VSTS), you have to configure an on premise build agent for access to the file share during builds.</li>
+<li>File shares are cumbersome for employees to access when they are not at the office.</li>
+<li>No download statistics.</li>
+</ul>
+<p>Make care that no firewall rules prevent you or the build server from accessing the file share.</p>
+<h3 id="On-Premise-ASP-NET-Web-Application"><a href="#On-Premise-ASP-NET-Web-Application" class="headerlink" title="On Premise - ASP.NET Web Application"></a>On Premise - ASP.NET Web Application</h3><p>An alternative to using file shares for on premise hosting is to use an ASP.NET web application. If you need any special access policies or special requirements regarding handling of packages, this is the way to go.</p>
+<p>NuGet calls this a Remote Feed, but can just as well be used internally. See <a href="https://docs.nuget.org/create/hosting-your-own-nuget-feeds" target="_blank" rel="noopener">the NuGet docs for how to create the ASP.NET Web Application</a>.</p>
+<p>Good:</p>
+<ul>
+<li>If put on a computer with a public IP, the feed can be used for public distribution.</li>
+<li>Fully customizable handling of NuGet packages.</li>
+</ul>
+<p>Bad:</p>
+<ul>
+<li>If the web application cannot be reached through internet, then it is cumbersome for employees to access it when they are not at the office.</li>
+<li>If it is desired to secure online access, some authentication work needs to be put in to secure the feed.</li>
+<li>No built in download statistics.</li>
+</ul>
+<p>To access a NuGet feed in VSTS, you need to configure a generic endpoint with the url of the application and the API key as the password. To get a build to publish packages to the feed, use the NuGet Publisher task and select the generic endpoint.</p>
+<p>If you use authentication, you need to put in the username and password into NuGet. To my knowledge, this is not supported yet by the built in NuGet tasks of VSTS. I have made a <a href="https://github.com/johanclasson/vso-agent-tasks/" target="_blank" rel="noopener">demo of how it could be done in my VSO Agent Tasks repository on GitHub</a>. Look for NuGet Publisher With Credentials.</p>
+<p>My guess is that Microsoft will eventually provide a special type of NuGet endpoint for this type of scenario.</p>
+<h3 id="Azure-Free-Webbapp-ASP-NET-Web-Application"><a href="#Azure-Free-Webbapp-ASP-NET-Web-Application" class="headerlink" title="Azure Free Webbapp - ASP.NET Web Application"></a>Azure Free Webbapp - ASP.NET Web Application</h3><p>Instead of putting the web application on premise, you can put it as a web application on Azure. Free web apps comes with up to 1GB of storage.</p>
+<p>The procedure to publish an ASP.NET web application to Azure is straightforward. Make sure you have selected Azure publishing when you create the web application project, then simply right click the project and select publish.</p>
+<p>Good:</p>
+<ul>
+<li>Can be used for public distribution.</li>
+<li>Fully customizable handling of NuGet packages.</li>
+</ul>
+<p>Bad:</p>
+<ul>
+<li>If desired, authentication work is needed for security.</li>
+<li>No built in download statistics.</li>
+</ul>
+<h3 id="MyGet"><a href="#MyGet" class="headerlink" title="MyGet"></a>MyGet</h3><p><a href="https://www.myget.org/" target="_blank" rel="noopener">MyGet</a> offers an advanced service for NuGet feed hosting. Their free alternative gives 500 MB of storage for public feeds protected by one or many API keys. For a minor fee, you will get 1GB of storage and the possibility to secure your feeds with authentication.</p>
+<p>Good:</p>
+<ul>
+<li>Can be used for public distribution.</li>
+<li>Advanced features like feed aggregation, feed synchronization, web hooks, policies for automatic deletion of old packages, etc.</li>
+</ul>
+<p>Bad:</p>
+<ul>
+<li>It will cost you some dollars each month to have a private feed.</li>
+</ul>
+<p>MyGet feeds are accessed in VSTS with generic endpoints just like the ASP.NET web application.</p>
+<p>MyGet supports a special way to add packages to a feed. By connecting a feed to a VSTS build, MyGet can search for any NuGet packages in the build artifacts and add the ones it find to your feed. This can be a convenient way to push packages to a private feed since you do not need to handle NuGet authentication credentials.</p>
+<p>To add NuGet packages to the build artifacts in VSTS, use the built in Publish Build Artifacts task.</p>
+<h3 id="VSTS-Package-Feeds"><a href="#VSTS-Package-Feeds" class="headerlink" title="VSTS Package Feeds"></a>VSTS Package Feeds</h3><p>Microsoft has just recently added a preview feature to VSTS called Package Management. It is free and offers unlimited storage. <em>(Well? I have not found any listed storage quotas in their documentation. I assume its unlimited since they have not got any storage quota for source code.)</em></p>
+<p>Because of the authentication model around VSTS, only private feeds are available.</p>
+<p>Good:</p>
+<ul>
+<li>Free private feeds</li>
+</ul>
+<p>Bad:</p>
+<ul>
+<li>No way to delete published packages. Yet anyway.</li>
+</ul>
+<p>To get started, find <a href="https://marketplace.visualstudio.com/items/ms.feed" target="_blank" rel="noopener">Package Management in the Visual Studio Marketplace</a> and click install.</p>
+<p>A few days ago, Microsoft patched the NuGet Publisher task to support internal NuGet feeds. When VSTS is updated next time (my guess is that it will be in the middle of december) all accounts will get the updated version, but if you do not want to wait you can <a href="https://github.com/Microsoft/vso-agent-tasks/tree/master/Tasks/NugetPublisher" target="_blank" rel="noopener">update it yourself</a>.</p>
+<p>This is how the task should look like:</p>
+<p><img src="./UpdatedNuGetPublisherTask.png" alt="Updated Nuget Publisher Task"></p>
+<p>Microsoft recommends that you <a href="https://www.visualstudio.com/get-started/package/use/consume#current" target="_blank" rel="noopener">consume VSTS package feeds in Visual Studio 2015 Update 1</a>. Since that version is not released yet? you can either use the <a href="https://www.visualstudio.com/en-us/news/vs2015-update1-vs.aspx" target="_blank" rel="noopener">release candidate</a>, or use the <a href="https://www.visualstudio.com/get-started/package/use/publish#auth-from-nuget" target="_blank" rel="noopener">workflow for older clients</a> which describes how to add the credentials to your local NuGet package sources.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/" data-id="ck93ug7vv0009dsyg3n2wc6bq" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015-12-10-Fight-Technical-Debt-with-SonarQube/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Fight Technical Debt With SonarQube
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Apply Semantic Versioning to Assemblies</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

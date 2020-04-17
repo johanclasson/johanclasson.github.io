@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Database Migration With DbUp and VSTS | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="PowerShell is a good way to invoke DbUp for running your migration scripts. DbUp makes it easy to keep both test- and production databases up to date.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Database Migration With DbUp and VSTS">
+<meta property="og:url" content="https://blog.classon.eu/2016-03-14-Database-Migration-with-DbUp-and-VSTS/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="PowerShell is a good way to invoke DbUp for running your migration scripts. DbUp makes it easy to keep both test- and production databases up to date.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-03-13T23:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:15:05.102Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-03-14-Database-Migration-with-DbUp-and-VSTS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016-03-14-Database-Migration-with-DbUp-and-VSTS/" class="article-date">
+  <time datetime="2016-03-13T23:00:00.000Z" itemprop="datePublished">2016-03-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Database Migration With DbUp and VSTS
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>All too often I find myself in projects where there is no efficient strategy around updating databases. Databases should be able to be migrated to the latest version without too much effort. If it’s too hard, developers will start sharing databases, or even worse, use a test environment database directly. </p>
+<p>If you usually do migrations by comparing the schema of two databases, now is an opportunity for you to do something better. Besides schema and security, a database also consists of data, and data is troublesome. Large tables takes both time and resources to alter. A tool simply cannot generate resource efficient migrations, or for example figure out where the data in that dropped column should go instead.</p>
+<p>Therefore you will always need a process or another tool to run transitional scripts beside the schema comparer. If you instead focus on the transitional script runner and have it logging which scripts that has been run to some persistent storage, you can use that log as a simple means to version your database. </p>
+<p>Also, do not forget to include configuration data, or sample data for test and development, in your migration process.</p>
+<h2 id="Run-Migrations-with-DbUp-and-VSTS-or-TFS-2015"><a href="#Run-Migrations-with-DbUp-and-VSTS-or-TFS-2015" class="headerlink" title="Run Migrations with DbUp and VSTS (or TFS 2015)"></a>Run Migrations with DbUp and VSTS (or TFS 2015)</h2><p>A favorite transitional script runner of mine have long been <a href="https://dbup.github.io/" target="_blank" rel="noopener">DbUp</a>. </p>
+<blockquote>
+<p>DbUp is a .NET library that helps you to deploy changes to SQL Server databases. It tracks which SQL scripts have been run already, and runs the change scripts that are needed to get your database up to date.</p>
+<p>– <a href="http://dbup.readthedocs.org/en/latest/" target="_blank" rel="noopener">DbUp Documentation</a>.</p>
+</blockquote>
+<p>One way that you can get started with DbUp is by importing its NuGet-package in a .NET console project. But I prefer to invoke it through PowerShell. That way nothing needs to be compiled, and as long as you have access to your migration scripts you are good to go. The PowerShell way also makes a good match for deployment scenarios with Octopus Deploy or Release Management.</p>
+<p>I have made a <a href="https://github.com/johanclasson/vso-agent-tasks#update-database-with-dbup" target="_blank" rel="noopener">VSTS Build and Release Task</a> for this purpose. But, if you would like to run DbUp elsewhere, the important part of the task is this <a href="https://github.com/johanclasson/vso-agent-tasks/blob/master/DbUpMigration/task/Update-DatabaseWithDbUp.ps1" target="_blank" rel="noopener">PowerShell script</a>.</p>
+<h2 id="Run-Your-Tools-Often"><a href="#Run-Your-Tools-Often" class="headerlink" title="Run Your Tools Often"></a>Run Your Tools Often</h2><p>As with all deployment tools, you should run them often. The more you run them the higher the probability gets that you will have found all mistakes before deployment is made to the production environment. This does not only mean that the same tool should be run in your CI builds, but also that each developer should use it to set up their own personal database. Never underestimate the value of dogfooding your deployment tools!</p>
+<h2 id="Non-transitional-Changes"><a href="#Non-transitional-Changes" class="headerlink" title="Non-transitional Changes"></a>Non-transitional Changes</h2><p>All database objects do not need to be changed transitionally like tables. For example regarding stored procedures and security objects, a more pragmatic approach is to keep a set of idempotent scripts that are run on each deploy. This is supported by the PowerShell script above with the <em>Journal</em> parameter. </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2016-03-14-Database-Migration-with-DbUp-and-VSTS/" data-id="ck93ug7vy000edsyg4i2f2psi" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Automatic Testing With an In-Memory Database and EF7
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016-02-25-Pay-151-SEK---Get-2400-SEK-Back-as-Azure-Credits-(Microsoft-Developer-Program-Benefit)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Pay 151 SEK - Get 2400 SEK Back as Azure Credits (Microsoft Developer Program Benefit)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

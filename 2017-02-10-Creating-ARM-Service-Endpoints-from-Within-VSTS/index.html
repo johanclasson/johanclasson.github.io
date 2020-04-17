@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Creating ARM Service Endpoints From Within VSTS | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Read how you can set up you Azure subscriptions so that you can be creating ARM service endpoints from within VSTS instead of having to create them manually">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Creating ARM Service Endpoints From Within VSTS">
+<meta property="og:url" content="https://blog.classon.eu/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="Read how you can set up you Azure subscriptions so that you can be creating ARM service endpoints from within VSTS instead of having to create them manually">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.classon.eu/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/vsts-add-arm-endpoint.png">
+<meta property="og:image" content="https://blog.classon.eu/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/vsts-azure-ad-permissions.png">
+<meta property="og:image" content="https://blog.classon.eu/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/vsts-azure-subscription-permissions.png">
+<meta property="article:published_time" content="2017-02-09T23:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:00:29.970Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.classon.eu/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/vsts-add-arm-endpoint.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/" class="article-date">
+  <time datetime="2017-02-09T23:00:00.000Z" itemprop="datePublished">2017-02-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Creating ARM Service Endpoints From Within VSTS
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>First, here is some background about what Visual Studio Team Services (VSTS) can do concerning Azure Resource Manager (ARM). </p>
+<p>As you probably know, Releases in VSTS has the capability to deploy build artifacts to subscriptions in Azure. Releases are configured through a list of tasks that performs the actual work, such as for example creating infrastructure with ARM-templates, or web-deploying applications to App Services.</p>
+<p>VSTS lets you store connection details to Azure Subscriptions in Service Endpoints for later reuse in release tasks.</p>
+<p>There are many Service Endpoint types, but the one of interest regarding ARM is the Azure Resource Manager Service Endpoint. When you create a new ARM Endpoint you enter its name, select one your Azure subscriptions in a dropdown, and if you are lucky, VSTS will create the connection. I will explain the prerequisites to be ?lucky? below.</p>
+<p><img src="./vsts-add-arm-endpoint.png" alt="Add ARM endpoint dialog in VSTS"></p>
+<p>The connection is actually an Azure application which use its service principal in the Azure Active Directory (Azure AD) to access subscriptions.</p>
+<p>If you cannot find the subscription you intend to deploy to in the drop down, or if VSTS fails to create the endpoint, you can attempt to create it manually, either by creating the application and service principal by hand in the Azure Portal, or through the PowerShell API. Here is a <a href="https://blogs.msdn.microsoft.com/visualstudioalm/2015/10/04/automating-azure-resource-group-deployment-using-a-service-principal-in-visual-studio-online-buildrelease-management" target="_blank" rel="noopener">blog post by Roopesh Nair</a> that explains the procedure in more detail. It links to a <a href="https://github.com/Microsoft/vsts-rm-documentation/blob/master/Azure/SPNCreation.ps1" target="_blank" rel="noopener">PowerShell script</a> that I have used on many occasions as a base when I had to set things up manually.</p>
+<h2 id="Manual-or-Automatic-Creation"><a href="#Manual-or-Automatic-Creation" class="headerlink" title="Manual or Automatic Creation"></a>Manual or Automatic Creation</h2><p>As you might already know, ARM service endpoints can only be shared within the team project where they are created. Since it takes a few minutes to get through the manual steps, I think that creating ARM Endpoints manually is a real pain, especially if your company use many team projects. I find it more beneficial to spend time to configure the subscriptions so that each user can let VSTS create the endpoints automatically for them, right when they are needed.</p>
+<h2 id="Automatic-ARM-Endpoint-Creation-Prerequisites"><a href="#Automatic-ARM-Endpoint-Creation-Prerequisites" class="headerlink" title="Automatic ARM Endpoint Creation Prerequisites"></a>Automatic ARM Endpoint Creation Prerequisites</h2><p>Here is a list of prerequisites that needs to be met to make VSTS able to create applications and grant subscription rights to their service principals. Some are more obvious than others.</p>
+<ul>
+<li>You must have an activated Azure Subscription (Duh!). </li>
+<li>Each subscription belongs to an Azure AD, and the account that you use to log into VSTS with needs to be present there.</li>
+<li>The account needs to be able to create an application in the Azure AD.</li>
+<li>The account needs to have the <code>*/read</code> and <code>Microsoft.Authorization/*/Write</code> permissions in the subscription.</li>
+</ul>
+<h3 id="Creating-an-Azure-Subscription"><a href="#Creating-an-Azure-Subscription" class="headerlink" title="Creating an Azure Subscription"></a>Creating an Azure Subscription</h3><p>If you have a Visual Studio Subscription or a Windows Developer account, you can activate your subscription with free credits through <a href="https://my.visualstudio.com" target="_blank" rel="noopener">https://my.visualstudio.com</a>. If you intend to use the subscription for production, create a Pay-As-You-Go subscription, preferably as a free account to start with from <a href="https://azure.microsoft.com/en-us/free" target="_blank" rel="noopener">https://azure.microsoft.com/en-us/free</a>.</p>
+<h3 id="Adding-an-account-from-another-Azure-AD"><a href="#Adding-an-account-from-another-Azure-AD" class="headerlink" title="Adding an account from another Azure AD"></a>Adding an account from another Azure AD</h3><p>Adding users to an Azure AD has become much easier in the new portal compared to how it was done in the old. Now you can add or invite users in the same dialog.</p>
+<p>If you enter a user email that corresponds to the Azure AD domain, a new user will be created. If you enter an email belonging to another domain, an invitation will be sent out, and the account will be added as a guest. I find it convenient to assign users that I add to the correct groups right in the add dialog.</p>
+<h3 id="Allowing-Creation-of-Applications-in-Azure-AD"><a href="#Allowing-Creation-of-Applications-in-Azure-AD" class="headerlink" title="Allowing Creation of Applications in Azure AD"></a>Allowing Creation of Applications in Azure AD</h3><p>There is a setting named <em>Users can register applications</em> which is found under <em>Azure Active Directory - User settings</em>. If set to Yes, non-administrator users are allowed to add applications to the Azure AD. If it is set to No, then your user accounts which is going to be able to add VSTS ARM Endpoints will have to be assigned to the Global administrator directory role. To my knowledge, it is not possible to add applications with any of the Limited administrator directory roles.</p>
+<p>If your Azure AD administrator is not fond of letting people creating applications as they like, my best advice is that you create a new directory for subscriptions, and that you add the user accounts that might create ARM endpoints in that as guests.</p>
+<p><img src="./vsts-azure-ad-permissions.png" alt="User permissions in Azure Active Directory"></p>
+<p>Guests users gets special treatment in Azure AD, and have a setting named <em>Guest users permissions are limited</em> which needs to be set to No to make them able to add applications. If it is set to Yes, it will not matter if you even assign the Global administrator role to the guest account. If you need to use guest accounts, this setting needs to be set to No. Period.</p>
+<h3 id="Assigning-the-User-Access-Administrator-Role"><a href="#Assigning-the-User-Access-Administrator-Role" class="headerlink" title="Assigning the User Access Administrator Role"></a>Assigning the User Access Administrator Role</h3><p>The application service principals VSTS creates to use to connect to subscriptions gets Contributor rights by default. Because of this, the user that creates the ARM endpoint needs to be allowed to assign permissions in the subscription.</p>
+<p>There are two default subscription roles that have the required permissions to do this, one is the <a href="https://docs.microsoft.com/en-us/azure/active-directory/role-based-access-built-in-roles#owner" target="_blank" rel="noopener">Owner</a> role, and the other the <a href="https://docs.microsoft.com/en-us/azure/active-directory/role-based-access-built-in-roles#user-access-administrator" target="_blank" rel="noopener">User Access Administrator</a> role.</p>
+<p>One way to archive this could be to assign the accounts as subscription co-administrators, which would grant them the Owner role. This would work, but gets tedious if you have many accounts that should be able to create ARM endpoints. What is easier is to grant the role you intend to use using a group, let?s say one named VSTS Endpoint Managers.</p>
+<p><img src="./vsts-azure-subscription-permissions.png" alt="User permissions in Azure Subscription"></p>
+<p>If you are really lucky, you have a colleague that already maintains a directory group that you can reuse.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/" data-id="ck93ug7w2000kdsyg572jcw1g" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Handle Secrets With .NET Core
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016-11-14-Implementing-Custom-Tasks-in-VSTS/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Implementing Custom Tasks in VSTS</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

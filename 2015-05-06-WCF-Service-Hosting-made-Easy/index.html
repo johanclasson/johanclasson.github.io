@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>WCF Service Hosting Made Easy | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Learn how you can host multiple WCF services with minimum configuration, and how you do not have to generate service clients to connect to them.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WCF Service Hosting Made Easy">
+<meta property="og:url" content="https://blog.classon.eu/2015-05-06-WCF-Service-Hosting-made-Easy/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="Learn how you can host multiple WCF services with minimum configuration, and how you do not have to generate service clients to connect to them.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2015-05-05T22:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:15:50.809Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-05-06-WCF-Service-Hosting-made-Easy" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015-05-06-WCF-Service-Hosting-made-Easy/" class="article-date">
+  <time datetime="2015-05-05T22:00:00.000Z" itemprop="datePublished">2015-05-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      WCF Service Hosting Made Easy
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I often hear that WCF is hard to work with because it needs so much configuration. That might have been true in .Net 3.5, but since .Net 4.0 <code>&lt;serviceActivations&gt;</code> has been around to make our lives easier. Today, .Net 4.0 is not far from the Stone Age… So I am surprised that this is still an issue.</p>
+<p>To get started simply:</p>
+<ol>
+<li>Create empty ASP.Net Web Application</li>
+<li>Add reference to System.ServiceModel.dll</li>
+<li>Add the <code>&lt;system.serviceModel&gt;</code> tag from the snippet below in your Web.config</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">system.serviceModel</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">protocolMapping</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">clear</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">add</span> <span class="attr">scheme</span>=<span class="string">"net.pipe"</span> <span class="attr">binding</span>=<span class="string">"netNamedPipeBinding"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">add</span> <span class="attr">scheme</span>=<span class="string">"net.tcp"</span> <span class="attr">binding</span>=<span class="string">"netTcpBinding"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">add</span> <span class="attr">scheme</span>=<span class="string">"http"</span> <span class="attr">binding</span>=<span class="string">"basicHttpBinding"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">protocolMapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">serviceHostingEnvironment</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">serviceActivations</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">add</span> <span class="attr">service</span>=<span class="string">"Example.Wcf.MyService"</span> <span class="attr">relativeAddress</span>=<span class="string">"./myservice.svc"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">factory</span>=<span class="string">"System.ServiceModel.Activation.ServiceHostFactory"</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">serviceActivations</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">serviceHostingEnvironment</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">system.serviceModel</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>You now have a convenient way to host WCF services by adding references to all Class Libraries that contain your service implementations. To get the Service Hosting Environment to pick up your services, all you have to do is to point them out with an extra <code>&lt;add /&gt;</code> under <code>&lt;serviceActivations&gt;</code>.</p>
+<p>This approach has a number of advantages:</p>
+<ul>
+<li>The hosting code is close to zero, which makes it easy to reach 100% code coverage through unit testing.</li>
+<li>All services automatically gets endpoints over many protocols, which makes the information flow in your application more configurable.</li>
+<li>In addition to the service implementation, there is no need for metadata files just to make hosting possible.</li>
+</ul>
+<p>Below is an example of a service implementation.</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.ServiceModel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Example.Wcf</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">ServiceContract</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IMyService</span></span><br><span class="line">    &#123;</span><br><span class="line">        [<span class="meta">OperationContract</span>]</span><br><span class="line">        <span class="function"><span class="keyword">int</span> <span class="title">Add</span>(<span class="params"><span class="keyword">int</span> x, <span class="keyword">int</span> y</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyService</span> : <span class="title">IMyService</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">Add</span>(<span class="params"><span class="keyword">int</span> x, <span class="keyword">int</span> y</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">return</span> x + y;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="IoC"><a href="#IoC" class="headerlink" title="IoC"></a>IoC</h2><p>To make it easier to test the services that I write, I often use IoC containers of some sort to handle dependency resolution. The default <code>ServiceHostFactory</code> does not let you configure the container.</p>
+<p>To do this with Unity you can replace the factory with a UnityServiceHostFactory, which can be found in the NuGet-package Unity.Wcf.</p>
+<h2 id="Client-Proxies"><a href="#Client-Proxies" class="headerlink" title="Client Proxies"></a>Client Proxies</h2><p>Please do not use WCF clients generated with Add ? Add Service Reference… They are hard to maintain and dispose of correctly.</p>
+<p>One way to create a proxy to a WCF service is to inherit <code>ClientBase&lt;T&gt;</code>. It works pretty well, except that someone at Microsoft must have made a mistake when implementing its Dispose functionality. Or more precise, its lack of. According to <a href="https://msdn.microsoft.com/en-us/library/aa355056.aspx" target="_blank" rel="noopener">their recommendations</a>; to be sure to close the proxy once you are done using it, the client code should be bloated with enormous try-catch blocks.</p>
+<p>What is natural for me is to use using-blocks, but apparently this is not possible without some customization.</p>
+<h3 id="Custom-Client-Proxy"><a href="#Custom-Client-Proxy" class="headerlink" title="Custom Client Proxy"></a>Custom Client Proxy</h3><p>Out on the ?internet?, there exists many suggestions how to do this. What has been working for me is to use the following wrapper around the <code>ClientBase&lt;T&gt;</code>.</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.ServiceModel;</span><br><span class="line"><span class="keyword">using</span> System.ServiceModel.Channels;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Example.Wcf</span></span><br><span class="line">&#123;</span><br><span class="line">    public interface IServiceClient&lt;T&gt; : IDisposable where T : class</span><br><span class="line">    &#123;</span><br><span class="line">        T Proxy &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public class ServiceClient&lt;T&gt; : IServiceClient&lt;T&gt; where T : class</span><br><span class="line">    &#123;</span><br><span class="line">        private class ClientProxy&lt;TChannel&gt; : ClientBase&lt;TChannel&gt; where TChannel : class</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="title">ClientProxy</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>            &#123;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="title">ClientProxy</span>(<span class="params">Binding binding, EndpointAddress remoteAddress</span>) : <span class="title">base</span>(<span class="params">binding, remoteAddress</span>)</span></span><br><span class="line"><span class="function"></span>            &#123;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">public</span> TChannel Proxy</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">get</span> &#123; <span class="keyword">return</span> Channel; &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">bool</span> _disposed;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">readonly</span> ClientProxy&lt;T&gt; _clientProxy; </span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">ServiceClient</span>(<span class="params">Binding binding, EndpointAddress remoteAddress</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            _clientProxy = <span class="keyword">new</span> ClientProxy&lt;T&gt;(binding, remoteAddress);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">ServiceClient</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            _clientProxy = <span class="keyword">new</span> ClientProxy&lt;T&gt;();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> T Proxy</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">get</span> &#123; <span class="keyword">return</span> _clientProxy.Proxy; &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Dispose</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            Dispose(<span class="literal">true</span>);</span><br><span class="line">            GC.SuppressFinalize(<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Dispose</span>(<span class="params"><span class="keyword">bool</span> disposing</span>)</span></span><br><span class="line"><span class="function"></span>        &#123;</span><br><span class="line">            <span class="keyword">if</span> (_disposed)</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            <span class="keyword">if</span> (!disposing)</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            <span class="keyword">if</span> (_clientProxy.State == CommunicationState.Faulted)</span><br><span class="line">            &#123;</span><br><span class="line">                _clientProxy.Abort();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                _clientProxy.Close();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span></span><br><span class="line">            &#123;</span><br><span class="line">                _clientProxy.Abort();</span><br><span class="line">            &#125;</span><br><span class="line">            _disposed = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ~ServiceClient()</span><br><span class="line">        &#123;</span><br><span class="line">            Dispose(<span class="literal">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>With it you can either provide the client configuration in your App/Web.config like so:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">system.serviceModel</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">client</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">endpoint</span> <span class="attr">address</span>=<span class="string">"net.pipe://localhost/Example.Wcf/myservice.svc"</span></span></span><br><span class="line"><span class="tag">                <span class="attr">binding</span>=<span class="string">"netNamedPipeBinding"</span> <span class="attr">contract</span>=<span class="string">"Example.Wcf.IMyService"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">client</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">system.serviceModel</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Or inject it manually in the <code>ServiceClient(Binding, EndpointAddress)</code> constructor.</p>
+<p>How do you use prefer to use WCF clients?</p>
+<h2 id="Project-Example"><a href="#Project-Example" class="headerlink" title="Project Example"></a>Project Example</h2><ul>
+<li><a href="https://github.com/johanclasson/ServiceConfig" target="_blank" rel="noopener">https://github.com/johanclasson/ServiceConfig</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2015-05-06-WCF-Service-Hosting-made-Easy/" data-id="ck93ug7vq0002dsyg5wpkdyvc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Hidden Capabilities of PowerShell ISE IntelliSense
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015-05-05-Dirty-Harry-Planning-with-TFS/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Dirty Harry Planning With TFS</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Apply Semantic Versioning to Assemblies | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Apply Semantic Versioning to Assemblies during VSTS&#x2F;TFS builds. Make generated NuGet packages versioned. Automate it with tasks in the new build workflow.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apply Semantic Versioning to Assemblies">
+<meta property="og:url" content="https://blog.classon.eu/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="Apply Semantic Versioning to Assemblies during VSTS&#x2F;TFS builds. Make generated NuGet packages versioned. Automate it with tasks in the new build workflow.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.classon.eu/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/ApplySemanticVersioningToAssemblies.png">
+<meta property="article:published_time" content="2015-11-22T23:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:04:04.270Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.classon.eu/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/ApplySemanticVersioningToAssemblies.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-11-23-Apply-Semantic-Versioning-to-Assemblies" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/" class="article-date">
+  <time datetime="2015-11-22T23:00:00.000Z" itemprop="datePublished">2015-11-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Apply Semantic Versioning to Assemblies
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>For some time now, Community TFS Build Extensions has provided a <a href="https://tfsbuildextensions.codeplex.com/SourceControl/latest#Scripts/ApplyVersionToAssemblies.ps1" target="_blank" rel="noopener">PowerShell script for automatic versioning of assemblies</a> during a build. This simple script served me well, until I heard about <a href="http://semver.org/" target="_blank" rel="noopener">semantic versioning</a>… To make a long story short, semantic versioning is a standard way to reason about version numbering.</p>
+<p>There are quite a few version patterns that are in use, where Major.Minor.Patch.Build is a common one. This is however not a valid format according to the semantic versioning specification, although I suspect that many relates to that pattern when they talk about versioning.</p>
+<p>The version patterns that NuGet supports are both Major.Minor.Patch and Major.Minor.Patch-Prerelease, see the <a href="https://docs.nuget.org/create/versioning" target="_blank" rel="noopener">versioning documentation of NuGet</a> for more details.  </p>
+<p>Up until now I have struggled with setting prerelease versions for NuGet packages automatically during a build. My problem with the standard .Net assembly version, which was the version that I used to focus on, is that it does not support the prerelease pattern. Because of this, I used to include the NuGet package version either directly in the nuspec-file or as an input parameter for the build.</p>
+<p>A couple of days ago I once again found myself in need of publishing a series of prerelease NuGet packages, and this time I found a way to make the versioning happen automatically. I discovered that .Net supports not only one, but three version types. I also found out how easy it is to create custom tools for the new build workflow in Visual Studio Team Services (VSTS) (Formerly Visual Studio Online) and TFS 2015.</p>
+<h2 id="Customizing-the-Build-To-Version-Assemblies"><a href="#Customizing-the-Build-To-Version-Assemblies" class="headerlink" title="Customizing the Build To Version Assemblies"></a>Customizing the Build To Version Assemblies</h2><p>VSTS and TFS 2015 bring a new build workflow with a set of predefined tools organized into build steps. Needless to say, although that these tools are great they do not cover all your customization scenarios of your build- or release flow. Invoking PowerShell scripts is often an appealing option for this kind of customization. Using PowerShell scripts is especially a good idea when you are making changes that are unique for your solution. Just write your script and invoke it!</p>
+<p>Working with builds that directly invokes PowerShell scripts has its limitations:</p>
+<ul>
+<li>If you have to deal with multiple arguments it is easy to get one of them wrong.</li>
+<li>Often when you update a PowerShell script you will affect its signature, and you might have to manually update its calling command at many places.</li>
+<li>Each build have to include the PowerShell script-files in its source code.</li>
+</ul>
+<p>Fortunately, it is relatively straightforward to package your scripts in a task of your own. Once such a task is installed, it can be used by all builds in the entire collection.</p>
+<h2 id="How-to-Create-a-New-Task"><a href="#How-to-Create-a-New-Task" class="headerlink" title="How to Create a New Task"></a>How to Create a New Task</h2><p>I have not found any official documentation on how to create new tasks, but the ones that are included in VSTS/TFS 2015 by default are available as <a href="https://github.com/Microsoft/vso-agent-tasks" target="_blank" rel="noopener">open source from Microsofts GitHub account</a>. A pragmatic approach for your first homebrewed task could be to copy an existing one and customize it to your needs. Just do not forget to generate a new ID!</p>
+<p>The minimum task should include <code>task.json</code>, <code>icon.png/svg</code> and <em>any files</em> that need to be invoked. The backend (build agents, which can be installed on both Windows and Linux) can handle running Node-, PowerShell-, and Bash scripts as well as invoking a process directly.</p>
+<h2 id="Installation-of-Tasks"><a href="#Installation-of-Tasks" class="headerlink" title="Installation of Tasks"></a>Installation of Tasks</h2><p>The <a href="https://github.com/Microsoft/tfs-cli" target="_blank" rel="noopener">TFS Cross Platform Command Line utility (tfx-cli)</a> is used to install tasks. It is built on Node.js, so if you have not already got Node.js you have to install it. One way to do that it is to use the Chocolatey command <code>cinst nodejs</code>.</p>
+<p>Then, to install a task run the following commands in a Node.js command prompt:</p>
+<ul>
+<li><code>npm install -g tfx-cli</code> - <em>This installs the tfx-cli tool.</em></li>
+<li><code>tfx login</code> - <em>The login is reused throughout the entire session.</em><ul>
+<li>Enter collection url &gt; <code>https://yourname.visualstudio.com/DefaultCollection</code></li>
+<li>Enter personal access token &gt; <code>2lqewmdba7theldpuoqn7zgs46bmz5c2ppkazlwvk2z2segsgqrq</code> - <em>This is obviously a bogus token… You can add tokens to access your account at <a href="https://yourname.visualstudio.com/_details/security/tokens" target="_blank" rel="noopener">https://yourname.visualstudio.com/_details/security/tokens</a>.</em> </li>
+</ul>
+</li>
+<li><code>tfx build tasks upload c:\path-to-repo\vso-agent-tasks\ApplySemanticVersioningToAssemblies</code><ul>
+<li><em>If you change your mind and do not want a task anymore, you can remove it with</em> <code>tfx build tasks delete b8df3d76-4ee4-45a9-a659-6ead63b536b4</code>, <em>where the Guid is easiest found in the task.json of your task.</em></li>
+</ul>
+</li>
+</ul>
+<p>If you make a change to a task that you have previously uploaded, you have to bump its version before you upload it again. The server does not allow overwriting the content of an existing version.</p>
+<h2 id="Describing-the-Apply-Semantic-Versioning-to-Assemblies-Build-Task"><a href="#Describing-the-Apply-Semantic-Versioning-to-Assemblies-Build-Task" class="headerlink" title="Describing the Apply Semantic Versioning to Assemblies Build Task"></a>Describing the Apply Semantic Versioning to Assemblies Build Task</h2><p>The solution to my NuGet package versioning problem was to use the build number to set the versions, and to configure the prerelease name in a build task. To make meaningful semantic versions of all three version types of .Net, they are set to different values. I have published the Apply Semantic Versioning to Assemblies task in my <a href="https://github.com/johanclasson/vso-agent-tasks" target="_blank" rel="noopener">VSO-Agent-Tasks GitHub repository</a> so you can make use of it.</p>
+<p>Added as a step in a build, this is how it looks.</p>
+<p><img src="./ApplySemanticVersioningToAssemblies.png" alt="Apply Semantic Versioning to Assemblies User Interface"></p>
+<h3 id="The-Three-Assembly-Versions-Supported-by-Net"><a href="#The-Three-Assembly-Versions-Supported-by-Net" class="headerlink" title="The Three Assembly Versions Supported by .Net"></a>The Three Assembly Versions Supported by .Net</h3><p>The <code>AssemblyVersion</code> is the number that is used by a dll to point out a reference to a specific version of another dll. If this version is changed in a newer dll, those references needs to be updated to target that dll instead. If you follow semantic versioning, the first two version numbers are the ones to increase when the public API changes. Therefore it is a good idea to include just those in the assembly version.</p>
+<p>The <code>AssemblyFileVersion</code> is not used by .Net directly, but is instead of value as a historical reference. If you would ever try to figure out from what build a dll has come from, then the assembly file version would help you answer that.</p>
+<p>The <code>AssemblyInformationalVersion</code> is something human-readable that describes a version, for example 1.0-RC1. This can theoretically be whatever text you prefer, but in this task it is only configurable to the format 1.2.3-abc0004. Note that the build number is left padded with zeros. The reason for this is that NuGet sorts prerelease versions alphabetically. Semantic versioning supports Major.Minor.Patch-Prerelease.Build, but NuGet does not. </p>
+<p>A great thing about the <code>AssemblyInformationalVersion</code> is that NuGet will use that for the package version if it is present. Problem solved!  </p>
+<h3 id="How-Does-It-Work"><a href="#How-Does-It-Work" class="headerlink" title="How Does It Work?"></a>How Does It Work?</h3><p>By use of a regular expression, exactly four version numbers (for example 1.2.3.4) are extracted from the build number. All AssemblyInfo.cs files are then iterated and versions are set in the following attributes:</p>
+<ul>
+<li><code>AssemblyVersion</code> - <em>Is set to either 1, 1.2, 1.2.3 or 1.2.3.4 depending on what you enter under “Version Numbers in AssemblyVersion-attribute”. 1.2 is the default.</em></li>
+<li><code>AssemblyFileVersion</code> - <em>Is set to 1.2.3.4. This is not configurable.</em> </li>
+<li><code>AssemblyInformationalVersion</code> - <em>Is set to either 1.2.3, 1.2.3-abc or 1.2.3-abc0004 depending on what you enter under “Make Release Version”, “Prerelease Name” and “Include Build Revision Number”.</em> </li>
+</ul>
+<p>When one of these attributes are present in the AssemblyInfo.cs-file, their entered version-string is replaced. Attributes which are not present are instead added at the end of the file.</p>
+<p>As you well understand, this task must be placed before the build task to make any difference.</p>
+<h3 id="Practical-Use"><a href="#Practical-Use" class="headerlink" title="Practical Use"></a>Practical Use</h3><p>The informational version format 1.2.3-abc0004, which is compatible with NuGet, can be used to represent prerelease packages from your nightly builds. For example 2.1.3-build0421 could be the semantic version for 421st build targeting the fourth bugfix of the second API update of the 2.0 release.</p>
+<p>When packing a project package and to have NuGet use the informational version number, just set the version tag to <code>&lt;version&gt;$version$&lt;/version&gt;</code> in the nuspec-file and you are good to go. </p>
+<p>When you are planning to make a new release, you might find that it is a good idea to have the version numbers you intend to have on release fixed and let the build revision number update until you are done. If this is the case, use <code>$(BuildDefinitionName).2.1.3$(Rev:.r)</code> as the <em>Build number format</em> for the build. When you think that you are done, you can simply tick “Make Release Version” and build to make a release version which in this case would be 2.1.3. If you would like to build a release candidate, untick “Include Build Revision Number” and replace the “Prerelease Name” to for example RC1 which would result in 2.1.3-RC1. </p>
+<h3 id="Advanced-Options"><a href="#Advanced-Options" class="headerlink" title="Advanced Options"></a>Advanced Options</h3><p>You can change the <em>Build Number Pattern</em> that is used to extract the version numbers from the build number. If you do, then make sure that you enter matching <em>Split Characters</em> and that there would still be exactly four versions present.</p>
+<h4 id="Other-Tools-to-Consider"><a href="#Other-Tools-to-Consider" class="headerlink" title="Other Tools to Consider"></a>Other Tools to Consider</h4><p>If you are using Git as version control, and do not mind some additional complexity, <a href="https://github.com/GitTools/GitVersion" target="_blank" rel="noopener">GitVersion</a> is an excellent tool. It fetch the version from the branch name, branch relations, commit tags and commit messages. This method of finding the version is superior to fetching it from the build number since you do not have to regularly update the build number format as you make releases.</p>
+<p>But it forces you to follow a specific branch- and pull request strategy (although I think it’s a good one) in your development process. Not everyone would like to do that.</p>
+<p>An other option is to use the versioning capabilities of the built in <a href="https://github.com/Microsoft/vso-agent-tasks/tree/master/Tasks/NugetPackager" target="_blank" rel="noopener">NuGet Packager task</a>. It contains an option to ?Use Build number to version package? which if checked sets a version to the NuGet package by an argument to the nuget.exe pack command. That version is extracted from the build number in a similar fashion as my Apply Semantic Versioning to Assemblies task does it, but in this case the version is fixed to be in the format Major.Minor.Patch.Build. Using this approach does not version the assemblies, nor does it support semantic versioning.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/" data-id="ck93ug7vv0008dsyg57f4fyqw" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Share Code With Your Own NuGet Feeds
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Git Push Only When You Have Something to Share</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

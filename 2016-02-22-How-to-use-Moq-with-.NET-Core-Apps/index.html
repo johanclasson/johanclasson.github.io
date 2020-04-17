@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>How to Use Moq With .NET Core Apps | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Moq does not officially support ASP.NET Core or Universal Windows platform apps yet. But you can instead use a fork that the ASP.NET Core team have made.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Use Moq With .NET Core Apps">
+<meta property="og:url" content="https://blog.classon.eu/2016-02-22-How-to-use-Moq-with-.NET-Core-Apps/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="Moq does not officially support ASP.NET Core or Universal Windows platform apps yet. But you can instead use a fork that the ASP.NET Core team have made.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2016-02-21T23:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:00:29.942Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-02-22-How-to-use-Moq-with-.NET-Core-Apps" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016-02-22-How-to-use-Moq-with-.NET-Core-Apps/" class="article-date">
+  <time datetime="2016-02-21T23:00:00.000Z" itemprop="datePublished">2016-02-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      How to Use Moq With .NET Core Apps
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Writing <a href="http://research.microsoft.com/apps/mobile/news.aspx?post=%2Fen-us%2Fnews%2Ffeatures%2Fnagappan-100609.aspx" target="_blank" rel="noopener">automatic tests is crucial if you care about producing code with good quality</a>. And why shouldn’t you! Yes, writing tests takes time, but the effort will soon be repaid. At least if the code is going to be around for a while. Have you ever been in a project where no one dares to refactor code since it is without coverage? Come on, be a <a href="http://blog.cleancoder.com/uncle-bob/2015/11/18/TheProgrammersOath.html" target="_blank" rel="noopener">Software Professional</a>!</p>
+<p>Enough said about that…</p>
+<p>When I test my code I make use of a suite of tools to make the work as easy as possible. There are many tools out there, and at least I am not interested in learning to use more of them than I have to. All devs have their favorite tools for testing, and one of mine is <a href="https://github.com/moq/moq4" target="_blank" rel="noopener">Moq</a>. When a new framework or platform is released I would very much still be able to instrument the mocking framework the way I am used to. </p>
+<p>If you try to use Moq through the official NuGet feed in an ASP.NET Core- or Universal Windows Platform (UWP) project you will find yourself in trouble. Some of the error messages you might see are:</p>
+<ul>
+<li><code>The dependency Moq 4.2.1510.2205 in project MyWebApplication does not support framework DNXCore,Version=v5.0</code></li>
+<li><code>Moq 4.2.1510.2205 is not compatible with UAP,Version=v10.0</code>.</li>
+</ul>
+<p>Moq does simply not support .NET Core yet. Now, what to do?</p>
+<h2 id="The-ASP-NET-Devs-at-Microsoft-to-the-Rescue"><a href="#The-ASP-NET-Devs-at-Microsoft-to-the-Rescue" class="headerlink" title="The ASP .NET Devs at Microsoft to the Rescue"></a>The ASP .NET Devs at Microsoft to the Rescue</h2><p>I have <a href="http://stackoverflow.com/questions/27918305/mocking-framework-for-asp-net-core-5-0/34933925#34933925" target="_blank" rel="noopener">come across</a> a <a href="https://github.com/aspnet/moq4" target="_blank" rel="noopener">fork of the Moq project</a> which luckily has added support for .NET Core. What is even better, there is a public NuGet feed at <code>https://www.myget.org/F/aspnetcidev/api/v3/index.json</code> where packages from that project are available. </p>
+<p>One way to use a nonstandard NuGet package source is to create a NuGet.Config-file in the root of your solution folder looking something like this:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">packageSources</span>&gt;</span></span><br><span class="line">        ...</span><br><span class="line">        <span class="tag">&lt;<span class="name">add</span> <span class="attr">key</span>=<span class="string">"AspNetVNext"</span> <span class="attr">value</span>=<span class="string">"https://www.myget.org/F/aspnetcidev/api/v3/index.json"</span> /&gt;</span></span><br><span class="line">        ...</span><br><span class="line">    <span class="tag">&lt;/<span class="name">packageSources</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Or you can add the AspNetVNext source-tag in your user profile NuGet file at <code>%AppData%\NuGet\NuGet.Config</code>.</p>
+<p>Note that the Moq package with .NET Core support is in preview. To reference it, add <code>&quot;moq.netcore&quot;: &quot;4.4.0-beta8&quot;</code> as a dependency in your <code>project.json</code>-file.</p>
+<p><em>Thank you Microsoft Devs for allowing me to use Moq on the .NET Core framework!</em></p>
+<h2 id="xUnit-and-the-Universal-Windows-Platform"><a href="#xUnit-and-the-Universal-Windows-Platform" class="headerlink" title="xUnit and the Universal Windows Platform"></a>xUnit and the Universal Windows Platform</h2><p>Another tool which I’m fond of is xUnit. To get xUnit to work with UWP you have to add it to a Unit Test App project. Adding it to a class library the way you might be used to does not work. The procedure is described in detail in the <a href="https://xunit.github.io/docs/getting-started-uwp.html" target="_blank" rel="noopener">xUnit documentation</a>.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2016-02-22-How-to-use-Moq-with-.NET-Core-Apps/" data-id="ck93ug7vy000cdsyg1iry8g6f" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016-02-25-Pay-151-SEK---Get-2400-SEK-Back-as-Azure-Credits-(Microsoft-Developer-Program-Benefit)/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Pay 151 SEK - Get 2400 SEK Back as Azure Credits (Microsoft Developer Program Benefit)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Automatically Stop Azure Resource Manager VMs</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

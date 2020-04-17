@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Implementing Custom Tasks in VSTS | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Create new tasks by implementing custom tasks in VSTS, and share them with the community! Or create tasks groups and use them in your team project.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Implementing Custom Tasks in VSTS">
+<meta property="og:url" content="https://blog.classon.eu/2016-11-14-Implementing-Custom-Tasks-in-VSTS/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="Create new tasks by implementing custom tasks in VSTS, and share them with the community! Or create tasks groups and use them in your team project.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.classon.eu/2016-11-14-Implementing-Custom-Tasks-in-VSTS/Create-Tasks-in-VSTS-Task-Group-1.png">
+<meta property="og:image" content="https://blog.classon.eu/2016-11-14-Implementing-Custom-Tasks-in-VSTS/Create-Tasks-in-VSTS-Task-Group-2.png">
+<meta property="og:image" content="https://blog.classon.eu/2016-11-14-Implementing-Custom-Tasks-in-VSTS/Create-Tasks-in-VSTS-Publishing-Portal.png">
+<meta property="article:published_time" content="2016-11-13T23:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:11:21.674Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.classon.eu/2016-11-14-Implementing-Custom-Tasks-in-VSTS/Create-Tasks-in-VSTS-Task-Group-1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2016-11-14-Implementing-Custom-Tasks-in-VSTS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016-11-14-Implementing-Custom-Tasks-in-VSTS/" class="article-date">
+  <time datetime="2016-11-13T23:00:00.000Z" itemprop="datePublished">2016-11-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Implementing Custom Tasks in VSTS
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I think that one of the strengths of the build and release system in Visual Studio Team Services (VSTS) is the large variety of tasks that is available. If you ever want a task that does something that the default tasks can’t do, chances are high that someone else has made a task for just that purpose already, and that it’s ready to be installed from the <a href="https://marketplace.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Marketplace</a>.</p>
+<p>But sometimes you might be out of luck, and you have to make the work yourself. What now?</p>
+<h2 id="Create-Task-Groups"><a href="#Create-Task-Groups" class="headerlink" title="Create Task Groups"></a>Create Task Groups</h2><p>The easiest way to create a reusable task is to create a Task Group from an already configured tasks in a build or release definition. You create a task group by selecting one or many tasks, right clicking, and selecting <em>Create task group</em>.</p>
+<p>Here is an example of a task that I’ve made that is made up of a single <a href="https://marketplace.visualstudio.com/items?itemName=petergroenewegen.PeterGroenewegen-Xpirit-Vsts-Build-InlinePowershell" target="_blank" rel="noopener">Azure PowerShell task</a>.</p>
+<p><img src="./Create-Tasks-in-VSTS-Task-Group-1.png" alt="Implementing Custom Tasks in VSTS - Task Group 1"></p>
+<p>All configuration variables, <em>the ones named like <code>$(abc)</code></em>, that are present in the tasks of a task group are put as input parameters of the task group, each with a configurable default value and description.</p>
+<p><img src="./Create-Tasks-in-VSTS-Task-Group-2.png" alt="Implementing Custom Tasks in VSTS - Task Group 2"></p>
+<p>Task groups are great because they are so easy to make, but have the drawback of only being available in the team project where they are created.</p>
+<h2 id="Implementing-Custom-Tasks-in-VSTS"><a href="#Implementing-Custom-Tasks-in-VSTS" class="headerlink" title="Implementing Custom Tasks in VSTS"></a>Implementing Custom Tasks in VSTS</h2><p>If you intend to share your tasks between several team projects or even accounts, your best option is to implement a custom task. Tasks in VSTS are made up of a command executable and a task manifest. The executable can be either a full blown command line application, or a simple PowerShell script. The task manifest is a json-file that contains some metadata such as the task ID, a declaration of what the configuration GUI should contain, and how the executable is invoked.</p>
+<p>Strangely, I have not been able to find any official documentation of how to fill in the task manifest json-file. But there is an <a href="https://github.com/Microsoft/vsts-task-lib/pull/146" target="_blank" rel="noopener">active pull request</a> with a <a href="https://github.com/AArnott/vsts-task-lib/blob/taskJsonSchema/tasks.schema.json" target="_blank" rel="noopener">schema</a> that may be useful if you ever wonder what to write. </p>
+<p>An easy way to get started is to copy one of the <a href="https://github.com/Microsoft/vsts-tasks" target="_blank" rel="noopener">default tasks of VSTS</a>, and modify it to your needs. Just remember to generate a new ID for your custom task!</p>
+<p>The <a href="https://github.com/Microsoft/vsts-task-lib/blob/master/README.md" target="_blank" rel="noopener">documentation of the VSTS DevOps Task SDK</a> encourages you to write scripts for either the agent’s Node or PowerShell3 handlers.</p>
+<p>Look at Microsoft’s reference tasks for guidance:</p>
+<ul>
+<li><a href="https://github.com/Microsoft/vsts-tasks/blob/master/Tasks/MSBuild" target="_blank" rel="noopener">MSBuild</a></li>
+<li><a href="https://github.com/Microsoft/vsts-tasks/blob/master/Tasks/VSBuild" target="_blank" rel="noopener">VSBuild</a></li>
+<li><a href="https://github.com/Microsoft/vsts-tasks/tree/master/Tasks/ShellScript" target="_blank" rel="noopener">ShellScript</a></li>
+<li><a href="https://github.com/Microsoft/vsts-tasks/tree/master/Tasks/Xcode" target="_blank" rel="noopener">XCode</a></li>
+</ul>
+<p>Or, if you want an old school PowerShell task without that much “SDK-noise” you can copy one of mine: </p>
+<ul>
+<li><a href="https://github.com/johanclasson/vso-agent-tasks/tree/master/DbUpMigration" target="_blank" rel="noopener">DbUpMigration</a></li>
+</ul>
+<p>I think you will find that making your own custom tasks is quite straight forward.</p>
+<h3 id="Install-Custom-Tasks-With-tfx-cli"><a href="#Install-Custom-Tasks-With-tfx-cli" class="headerlink" title="Install Custom Tasks With tfx-cli"></a>Install Custom Tasks With tfx-cli</h3><p>One way to install a task is to use the <a href="https://github.com/Microsoft/tfs-cli" target="_blank" rel="noopener">TFS Cross Platform Command Line utility (tfx-cli)</a> in a Node.js command prompt:</p>
+<ul>
+<li><code>npm install -g tfx-cli</code> - <em>This installs the tfx-cli tool.</em></li>
+<li><code>tfx login</code> - <em>The login is reused throughout the entire session.</em><ul>
+<li>Enter collection url &gt; <code>https://yourname.visualstudio.com/DefaultCollection</code></li>
+<li>Enter personal access token &gt; <code>2lqewmdba7theldpuoqn7zgs46bmz5c2ppkazlwvk2z2segsgqrq</code> - <em>This is obviously a bogus token… You can add tokens to access your account at <a href="https://yourname.visualstudio.com/_details/security/tokens" target="_blank" rel="noopener">https://yourname.visualstudio.com/_details/security/tokens</a>.</em> </li>
+</ul>
+</li>
+<li><code>tfx build tasks upload --task-path c:\path-to-repo\MyCustomTask</code><ul>
+<li><em>If you change your mind and do not want a task anymore, you can remove it with</em> <code>tfx build tasks delete --task-id b8df3d76-4ee4-45a9-a659-6ead63b536b4</code>, <em>where the Guid is easiest found in the task.json of your task.</em></li>
+</ul>
+</li>
+</ul>
+<p>If you make a change to a task that you have previously uploaded, you have to bump its version before you upload it again.</p>
+<h3 id="Create-Team-Services-Extensions"><a href="#Create-Team-Services-Extensions" class="headerlink" title="Create Team Services Extensions"></a>Create Team Services Extensions</h3><p>Another way to install a custom task is to package it inside an Team Services extension. You can read in the <a href="https://www.visualstudio.com/en-gb/docs/integrate/extensions/publish/overview" target="_blank" rel="noopener">official documentation how to get started</a>, or just follow these steps.</p>
+<p>If you do not have a publisher id already, head over to the <a href="http://aka.ms/vsmarketplace-manage" target="_blank" rel="noopener">Visual Studio Marketplace Publishing Portal</a> and create it in one of the Azure directories which are associated with your account.</p>
+<p>Create an extension manifest-file with the name <code>vss-extension.json</code>, and with content like the following:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"manifestVersion"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"id"</span>: <span class="string">"UniqueExtensionId"</span>, <span class="comment">//FIXME</span></span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"Your extension name"</span>, <span class="comment">//FIXME</span></span><br><span class="line">    <span class="attr">"version"</span>: <span class="string">"1.2.3"</span>, <span class="comment">//FIXME</span></span><br><span class="line">    <span class="attr">"publisher"</span>: <span class="string">"yourpublisherid"</span>, <span class="comment">//FIXME</span></span><br><span class="line">    <span class="comment">//"galleryFlags": ["Public"],</span></span><br><span class="line">    <span class="attr">"targets"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"id"</span>: <span class="string">"Microsoft.VisualStudio.Services"</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"description"</span>: <span class="string">"A brief description which will be shown in the marketplace tile."</span>, <span class="comment">//FIXME</span></span><br><span class="line">    <span class="attr">"categories"</span>: [</span><br><span class="line">        <span class="string">"Build and release"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"tags"</span>: [ <span class="comment">//FIXME</span></span><br><span class="line">        <span class="string">"some"</span>,</span><br><span class="line">        <span class="string">"tags"</span>,</span><br><span class="line">        <span class="string">"for"</span>,</span><br><span class="line">        <span class="string">"discoverability"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"content"</span>: &#123;</span><br><span class="line">        <span class="attr">"details"</span>: &#123;</span><br><span class="line">            <span class="attr">"path"</span>: <span class="string">"relativePathTo/README.md"</span> <span class="comment">//FIXME</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"license"</span>: &#123;</span><br><span class="line">            <span class="attr">"path"</span>: <span class="string">"relativePathToLicenseFile"</span> <span class="comment">//FIXME</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"links"</span>: &#123;</span><br><span class="line">        <span class="attr">"support"</span>: &#123;</span><br><span class="line">            <span class="attr">"uri"</span>: <span class="string">"https://some-uri.com"</span> <span class="comment">//FIXME</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"branding"</span>: &#123;</span><br><span class="line">        <span class="attr">"color"</span>: <span class="string">"rgb(36, 43, 50)"</span>,</span><br><span class="line">        <span class="attr">"theme"</span>: <span class="string">"dark"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"icons"</span>: &#123;</span><br><span class="line">        <span class="attr">"default"</span>: <span class="string">"relativePathTo/extension-icon.png"</span> <span class="comment">//FIXME</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"files"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"path"</span>: <span class="string">"relativePathToTaskFolder"</span> <span class="comment">//FIXME</span></span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"contributions"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"id"</span>: <span class="string">"UniqueIdOfTask"</span>, <span class="comment">//FIXME</span></span><br><span class="line">            <span class="attr">"type"</span>: <span class="string">"ms.vss-distributed-task.task"</span>,</span><br><span class="line">            <span class="attr">"targets"</span>: [</span><br><span class="line">                <span class="string">"ms.vss-distributed-task.tasks"</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">"properties"</span>: &#123;</span><br><span class="line">                <span class="attr">"name"</span>: <span class="string">"relativePathToTaskFolder"</span> <span class="comment">//FIXME</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Then, run the command <code>tfx extension create</code> in a Node.js command prompt, and upload the generated .vsix-file in the publishing portal.</p>
+<p><img src="./Create-Tasks-in-VSTS-Publishing-Portal.png" alt="Implementing Custom Tasks in VSTS - Publishing Portal"></p>
+<p>Or if you prefer, you can use the command <code>tfx extension publish</code> instead, and supply your personal access token. </p>
+<p>If the <code>&quot;galleryFlags&quot;: [&quot;Public&quot;]</code> setting is kept commented out, the extension will default to be a private extension, meaning that the extension will only be available in the collections you choose. Access to private extensions are managed through the publishing portal.</p>
+<p>Once your extension is battle proven, be a good community member and make it public so that all can benefit from your work.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2016-11-14-Implementing-Custom-Tasks-in-VSTS/" data-id="ck93ug7w0000hdsyghhagd9fu" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Creating ARM Service Endpoints From Within VSTS
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Migrating a GitHub Repository to VSTS</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

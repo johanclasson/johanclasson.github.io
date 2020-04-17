@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Dirty Harry Planning With TFS | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="If used right, TFS is a great tool for planning project work. Learn about using teams to filter backlog items, and why PBIs are more important than tasks.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dirty Harry Planning With TFS">
+<meta property="og:url" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="If used right, TFS is a great tool for planning project work. Learn about using teams to filter backlog items, and why PBIs are more important than tasks.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-pobacklog.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-team1backlog.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/%22./dirtyharryplanningwithtfs-team2backlog.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-rootbacklog.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-excel.png">
+<meta property="article:published_time" content="2015-05-04T22:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T07:00:29.889Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-pobacklog.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-05-05-Dirty-Harry-Planning-with-TFS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015-05-05-Dirty-Harry-Planning-with-TFS/" class="article-date">
+  <time datetime="2015-05-04T22:00:00.000Z" itemprop="datePublished">2015-05-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Dirty Harry Planning With TFS
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Planning is hard. If you overestimate your ability to beforehand know details of the future, your planning will fail. Even if you only plan for a two week iteration. Like Harry Callahan said in Magnum Force, <a href="https://www.youtube.com/watch?v=_VrFV5r8cs0" target="_blank" rel="noopener">?a man’s got to know his limitations?</a>.</p>
+<h2 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h2><p>This article is based on the Scrum Process Template, since I think it is the most popular one.</p>
+<p>If used right, TFS is a great tool for planning project work. Unfortunately it is fairly common that its planning capabilities are used in a counterproductive way which can make TFS hard to work with.</p>
+<ul>
+<li>If lots of PBIs are added to the backlog it makes it hard to get an overview. For example to know which PBIs needs more attention before they can be started to work on, one need to categorize them somehow. Some do it by a parent-child relationship between PBIs, but then it hard to prioritize between PBIs belonging to different parents since TFS orders the backlog by their respective parents.</li>
+<li>People tend to focus on the Iteration Backlog which makes it easy to forget about the more important large scoped workflows. It is common that the team focus on micro managing stuff that really does not matter, like task beak down and estimation. It is not uncommon to find PBIs with more than ten tasks added to them.</li>
+<li>Most tasks are added during the planning meeting, but almost always some are added during the sprint to cover for details which was not initially thought of. Some call this scope creep, but it should really be called bad planning.</li>
+</ul>
+<h3 id="Discussion"><a href="#Discussion" class="headerlink" title="Discussion"></a>Discussion</h3><p>When planning, a primary concern should be making PBIs that are small enough so that they can be delivered when the sprint is over. The larger a PBI gets, the higher the risk that it does not reach ?done? (whatever that means for your team) at the end of the sprint. Half-finished PBIs need to be split which is not only a time consuming activity in itself, but is also bad for accuracy of the Velocity key metric.</p>
+<p>Your coworkers depend on the state of the PBI and not the state of its tasks. For example, a test specialist might be interested in PBIs that are ready to be tested. A developer specialist wanting to start working on a PBI might be interested in when a dependent upon PBI is implemented. If the team hangs around in the Sprint Backlog these states are not visual enough, nor are they easy to update.</p>
+<p>If the team backlog is a mix of PBIs that are ready to work on, and some are not, it is hard to know what items to handle during a grooming meeting. The result in the long run can be a backlog full of junk which is prioritized in an order that cannot be trusted.</p>
+<h3 id="Why-using-tasks-might-be-a-bad-idea"><a href="#Why-using-tasks-might-be-a-bad-idea" class="headerlink" title="Why using tasks might be a bad idea"></a>Why using tasks might be a bad idea</h3><p>If you are used of adding tasks to a PBI you might feel that it is not that important to fill in the Description field. When the description field is empty you will most likely forget about the Acceptance Criteria as well.</p>
+<p>One can question the tradeoff from using tasks in your team. Is it really that important for you to check in code against a task? Are your burndown charts that precious that you must have them? Especially if they do not even slope downward, as often is the case.</p>
+<p>If you do not have tasks, you are forced to do a better job creating the PBIs. For example, they automatically get smaller and with more detailed information. Project stakeholders will be happy. And as a nice bonus for yourself, you are no longer asked to estimate bogus hours on tasks. When was the last time that it played out as you thought? Everybody wins!</p>
+<p>Well, using tasks might be a good idea for some. Maybe your project has very few dependencies, your team is experienced and you know very well what has to be done. But still, the first step for everyone should be to get familiar with PBIs and how they should be used. Then after you think you have mastered their creation and workflow activities, go ahead and use tasks. </p>
+<h2 id="How-to-use-TFS-to-keep-a-clean-backlog"><a href="#How-to-use-TFS-to-keep-a-clean-backlog" class="headerlink" title="How to use TFS to keep a clean backlog"></a>How to use TFS to keep a clean backlog</h2><p>It is a bad idea to keep your planning of future sprints in the team backlogs.</p>
+<p>One might be tempted to do the planning in another tool, but that is not optimal either. It is always best to keep all related information in the same place. TFS actually comes with the possibility to have different backlogs for different teams, which solves this problem.</p>
+<p>In a project consisting of two teams, one might use the following configuration:</p>
+<h3 id="Teams"><a href="#Teams" class="headerlink" title="Teams"></a>Teams</h3><ul>
+<li>Root Team, can access both team backlogs</li>
+<li>PO Team, planning of future PBIs</li>
+<li>Team 1</li>
+<li>Team 2</li>
+</ul>
+<h3 id="Area-configuration"><a href="#Area-configuration" class="headerlink" title="Area configuration"></a>Area configuration</h3><ul>
+<li>Future, default for PO Team</li>
+<li>Team, default for Root Team<ul>
+<li>1, default for Team 1</li>
+<li>2, default for Team 2</li>
+</ul>
+</li>
+</ul>
+<p>Planning for the future and grooming activities are performed in the PO team, which results in clean backlogs for the other two teams. Most of the time, they will only contain items from the current sprint. This makes the Backlog Items Board usable in the iteration. The combined status of the teams can be examined through the Root Team backlog.</p>
+<h3 id="Customizing-Kanban-Columns"><a href="#Customizing-Kanban-Columns" class="headerlink" title="Customizing Kanban Columns"></a>Customizing Kanban Columns</h3><p>PBIs and Bugs comes with two types of states. The normal New-Approved-Committed-Done state, and a customizable Kanban state. The latter can be thought of like a sub-state of the normal state. It can unfortunately not be shared across teams, but is an easy way to customize the workflow within a team. The Kanban states are represented by columns in the Backlog Items Board.</p>
+<p>To illustrate what is possible, I have taken screen shots from the respective team backlogs of my example. These can be customized without changing the Scrum Process Template, which means that it does not matter if you run an On Premise TFS installation or in the cloud service Visual Studio Online.</p>
+<h4 id="The-PO-Team-Backlog"><a href="#The-PO-Team-Backlog" class="headerlink" title="The PO Team Backlog"></a>The PO Team Backlog</h4><p><img src="./dirtyharryplanningwithtfs-pobacklog.png" alt="PO backlog"></p>
+<p>The PO Team is responsible for creating new PBIs, which are given the new state by default. The Kanban columns Candidates and Grooming are added as sub-states of New. When a PBI is detailed enough so that work can be started it is moved to the Approved column which sets the Approved state. The PBI will not show up in a team backlog until it is moved to the area path of a team.</p>
+<p>Note that the Business Value field is added in the cards because it gives great meaning for the PO Team.</p>
+<h4 id="The-Team-1-Backlog"><a href="#The-Team-1-Backlog" class="headerlink" title="The Team 1 Backlog"></a>The Team 1 Backlog</h4><p><img src="./dirtyharryplanningwithtfs-team1backlog.png" alt="Team 1 Backlog"></p>
+<p>The Team 1 and 2 are responsible for implementing approved PBIs from the PO Team. PBIs which are committed to during a sprint is moved to the Committed state. The Approved state is not shown in the Board since sprint planning is normally done in the Backlog- and not in the Board view.</p>
+<p>The Kanban columns Implemented and Testable are added as sub-states of Commited. When tests are passed PBIs are moved to the Done column which sets the Done state.</p>
+<h4 id="The-Team-2-Backlog"><a href="#The-Team-2-Backlog" class="headerlink" title="The Team 2 Backlog"></a>The Team 2 Backlog</h4><p><img src="%22./dirtyharryplanningwithtfs-team2backlog.png" alt="Team 2 Backlog"></p>
+<p>Here the Kanban columns In Process and Testable are added as sub-states of Committed. In Process use the Split Column functionality.</p>
+<h4 id="The-Root-Team-Backlog"><a href="#The-Root-Team-Backlog" class="headerlink" title="The Root Team Backlog"></a>The Root Team Backlog</h4><p><img src="./dirtyharryplanningwithtfs-rootbacklog.png" alt="Root Team Backlog"></p>
+<p>The Root Team is not used to do any real work but only view the combined backlogs of Team 1 and 2. Since Kanban states are not shared cross teams there is no use adding any extra columns to the board.</p>
+<p>Because work items are included from different teams it gives meaning to display the area path on the cards.</p>
+<h3 id="Using-Excel-to-Move-PBIs-between-Areas"><a href="#Using-Excel-to-Move-PBIs-between-Areas" class="headerlink" title="Using Excel to Move PBIs between Areas"></a>Using Excel to Move PBIs between Areas</h3><p>A nice feature of TFS is that you can edit work items through Excel. In short it gets a list of work items from a Query and lets you edit them all in a spreadsheet instead of doing it one by one. It also lets you create new work items or change parent-child relations.</p>
+<p>To use this feature you have to have Excel (obviously) and Visual Studio installed. You can read in the <a href="https://msdn.microsoft.com/en-us/library/ms181675.aspx" target="_blank" rel="noopener">instructions on MSDN</a> that it is sufficient to install Team Explorer if you do not already have Visual Studio installed, although I have never tried that for myself.</p>
+<p>To get started simply open Excel, under Team ribbon click New List, Select your Query and you are good to go. When you are done editing press Publish to upload your changes to TFS.</p>
+<p><img src="./dirtyharryplanningwithtfs-excel.png" alt="Edit Work Items with Excel"></p>
+<p>Using the TFS spreadsheet functionality is the most convenient way to move approved PBIs from the PO Team to one of backlogs of Team 1 or 2.</p>
+<h3 id="Final-comment"><a href="#Final-comment" class="headerlink" title="Final comment"></a>Final comment</h3><p>Note that there are intentionally no iterations in my example. I did not check any iterations because I would like to help (or force if you are fond of strong words) the teams to keep their PBIs in order.</p>
+<p>Happy planning!</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/" data-id="ck93ug7vn0000dsyg4uqg67qv" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015-05-06-WCF-Service-Hosting-made-Easy/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          WCF Service Hosting Made Easy
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">March 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">February 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+          </li>
+        
+          <li>
+            <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+          </li>
+        
+          <li>
+            <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

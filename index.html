@@ -1,8 +1,369 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>TBD</title>
-    </head>
-    <body>
-        TBD
-    </body>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Johan Classon Blog">
+<meta property="og:url" content="https://blog.classon.eu/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-2019-05-31-Release-Notes-with-Azure-DevOps" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/" class="article-date">
+  <time datetime="2019-05-30T22:00:00.000Z" itemprop="datePublished">2019-05-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>The process that suites your team best might be different from what might be best for someone else. In this blog post, I would like to share how you can construct release notes with Azure DevOps in a nice ordered fashion.</p>
+<p>When you need to publish release notes you might be facing difficulties such as:</p>
+<ul>
+<li>How to make them awesome (!).</li>
+<li>How to reach your audience.</li>
+<li>How to be as effective as possible.</li>
+</ul>
+<h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR;"></a>TL;DR;</h2><p>1)    Write release notes in Product Backlog Items (PBIs).<br>2)    Collect release notes from PBIs into a Markdown document.<br>3)    Review by pull request (PR).<br>4)    Publish.</p>
+<h2 id="Making-Them-Awesome"><a href="#Making-Them-Awesome" class="headerlink" title="Making Them Awesome"></a>Making Them Awesome</h2><h3 id="What-Changes-Have-Been-Introduced-Since-Last-Release"><a href="#What-Changes-Have-Been-Introduced-Since-Last-Release" class="headerlink" title="What Changes Have Been Introduced Since Last Release?"></a>What Changes Have Been Introduced Since Last Release?</h3><p>Obviously, you need some way to find out which changes that have been made, and also, which of those that are candidates to be included in the release notes. </p>
+<p>Just prior to the release, you could construct a list of all changes manually, for example by summarizing the pushed commits. This approach is optimal if your team works in an ad-hoc fashion or without planning.</p>
+<p>If you really want to, you can diff what code that changed since last release, and then write the release notes with that as guidance.</p>
+<p>You might be tempted to use a Git repository log as reference, be aware of that commit messages might not be the best source of information for release notes since they are often written for other developers! If developers are indeed your target audience, you could just as well direct them to your repository instead of summarizing its log in a document somewhere.</p>
+<p>My point here is that I do not recommend you relying on a tool for summarizing your release notes. By just planning a little you will have your summary already. For example, if you decide beforehand what to include in a release, then you will already have a nice list of what to include in the release notes. </p>
+<h3 id="What-Changes-Might-Be-of-Importance-to-the-Audience-and-What-Changes-Might-Not"><a href="#What-Changes-Might-Be-of-Importance-to-the-Audience-and-What-Changes-Might-Not" class="headerlink" title="What Changes Might Be of Importance to the Audience, and What Changes Might Not?"></a>What Changes Might Be of Importance to the Audience, and What Changes Might Not?</h3><p>In Azure DevOps I plan my releases with PBI work items. I have found it convenient to include a custom boolean field in the PBI that I can then use for making a query to select just the right PBIs to include in the release notes.</p>
+<p>If you have different audiences, you can consider adding multiple boolean fields, one for each audience.</p>
+<p>How to add custom fields to work items are described in the official <a href="https://docs.microsoft.com/en-us/azure/devops/organizations/settings/work/customize-process-field?view=azure-devops" target="_blank" rel="noopener">Azure DevOps documentation</a>.</p>
+<h3 id="How-Can-You-Make-Sure-That-the-Information-in-the-Release-Notes-Are-Correct"><a href="#How-Can-You-Make-Sure-That-the-Information-in-the-Release-Notes-Are-Correct" class="headerlink" title="How Can You Make Sure That the Information in the Release Notes Are Correct?"></a>How Can You Make Sure That the Information in the Release Notes Are Correct?</h3><p>In my opinion, the ones best qualified to describe a change is probably the ones that have implemented it. This means that I do not think that it is a good idea to let just a few people write the release notes. Instead you should have your whole team engaged in writing them.</p>
+<p>You might think that this is overkill, but in the best of worlds, I think that you would benefit from writing the release notes for a PBI before you start implementing it. The idea is to force you to think about the end-user or customer’s perspective as early as possible in your development process.</p>
+<p>I recommend that you include custom text-fields for release notes directly in the PBI. That way it will be easy to find where to write. Here is an example.</p>
+<p><img src="/2019-05-31-Release-Notes-with-Azure-DevOps/PBI-release-notes-fields.png" alt="PBI custom fields for making release notes with Azure DevOps"></p>
+<p>If your team do not commit to writing release notes beforehand, you could add a reminder for everyone to finish their release notes by including it in your team’s definition of done.</p>
+<h3 id="How-to-Make-the-Release-Notes-Readable"><a href="#How-to-Make-the-Release-Notes-Readable" class="headerlink" title="How to Make the Release Notes Readable?"></a>How to Make the Release Notes Readable?</h3><p>Of course you can make a best effort writing nice readable descriptions for each PBI. I imagine this is a matter of personal opinion, but I think it is hard to make proof-reeding when I only have the release notes from a single PBI on the screen. Therefore, I like to collect all release notes from the PBIs into a single document before the review process begins.</p>
+<p>I treat that single document as the final product, and hence I often do not care to update the descriptions in the PBIs. These can be seen upon as just history if you will.</p>
+<p>You can find an example how to generate release notes in Markdown format using PowerShell in <a href="https://gist.github.com/johanclasson/027f49ef0bf9e924927554b4926266bd" target="_blank" rel="noopener">this gist</a>. The script iterates all work items returned by a query and constructs the document content from the custom title- and description-fields in those.</p>
+<p>Here is an example of how to use it:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$content</span> = .\<span class="built_in">Get-ReleaseNotes</span>.ps1 <span class="literal">-Pat</span> <span class="string">'abc123'</span> <span class="literal">-Organization</span> <span class="string">'Fabrikam'</span> <span class="literal">-Project</span> <span class="string">'Fiber'</span> <span class="literal">-Query</span> <span class="string">'My Queries/Release Notes'</span></span><br><span class="line"><span class="variable">$utf8NoBomEncoding</span> = <span class="built_in">New-Object</span> System.Text.UTF8Encoding <span class="variable">$False</span></span><br><span class="line"><span class="variable">$path</span> = <span class="built_in">Join-Path</span> (<span class="built_in">Resolve-Path</span> .\notes) sprint<span class="literal">-11</span>.md</span><br><span class="line">[<span class="type">System.IO.File</span>]::WriteAllLines(<span class="variable">$path</span>, <span class="variable">$content</span>, <span class="variable">$utf8NoBomEncoding</span>) <span class="comment"># Outputs UTF8 without BOM</span></span><br></pre></td></tr></table></figure>
+
+<p>My format of choice for release notes is Markdown, and that is because of the following reasons.</p>
+<ul>
+<li>Markdown is a perfect format for making reviews through PRs to a Git repository.</li>
+<li>It is relatively easy to convert Markdown into whatever format you need to publish in.</li>
+</ul>
+<p>I would like to stress that the more people that are engaged in both writing and reviewing release notes the better they become. In addition to involving technical experts in the review process, I also like to have generally skilled writers review the document at least once before it is published.</p>
+<h2 id="How-to-Reach-Your-Audience"><a href="#How-to-Reach-Your-Audience" class="headerlink" title="How to Reach Your Audience"></a>How to Reach Your Audience</h2><p>Difference audiences a best reached by different means. For example, if you do not have direct contact with your end users you might want to publish your release notes as HTML on your product’s website. Or if your audience does not actively search for release notes you might want to consider publishing your release notes as a PDF-file which you mail to your end users.</p>
+<p>If you would like to be fancy, you can integrate the release notes into the actual product so that your end users can pull up-, or are presented with-, the release notes just as they use the new version of your product the first time.</p>
+<h2 id="How-to-Be-as-Effective-as-Possible"><a href="#How-to-Be-as-Effective-as-Possible" class="headerlink" title="How to Be as Effective as Possible"></a>How to Be as Effective as Possible</h2><p>Doing all of this planning, PBI-tinkering and reviewing might seem like a lot of work. But I hope that you might soon realize that it is indeed less work compared to manually construct release notes in an ad-hoc fashion.</p>
+<p>Also, when you write the release notes close to when you design or implement a change, then you do not have to spend as much time figuring out what to write.</p>
+<p>I think that being effective is not only about spending less time writing release notes, but also that you also produce content with high quality. The review process is essential to archive this. Please do not skip reviewing of your release notes!</p>
+<p>If your teams are already familiar with doing PRs to review code, reviewing release notes in the same way should not be so complicated.</p>
+<h2 id="Process"><a href="#Process" class="headerlink" title="Process"></a>Process</h2><p>Here I will summarize an example of how the overall process might look like. </p>
+<p>The release notes owner manages a work item query which selects the work items which are meant to be included in the release notes.</p>
+<p>An overview of the process around creating release notes is presented below.</p>
+<p><img src="/2019-05-31-Release-Notes-with-Azure-DevOps/process-overview.png" alt="Process Overview"></p>
+<h3 id="Two-Weeks-Prior-Release"><a href="#Two-Weeks-Prior-Release" class="headerlink" title="Two Weeks Prior Release"></a>Two Weeks Prior Release</h3><p>The release notes owner executes the query and mails its result to the team members who can see if some work items are missing or should be removed.</p>
+<h3 id="One-Week-Prior-Release"><a href="#One-Week-Prior-Release" class="headerlink" title="One Week Prior Release"></a>One Week Prior Release</h3><p>When everyone has completed entering the release notes in the selected work items, the release notes owner generates a Markdown-file and starts a pull request. The team reviews the document, correcting mistakes until everyone agrees that the quality is high enough at which point the pull request is merged.</p>
+<h3 id="Day-of-Release"><a href="#Day-of-Release" class="headerlink" title="Day of Release"></a>Day of Release</h3><p>The release notes owner triggers an automated process which converts the Markdown-file to various possible formats.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2019-05-31-Release-Notes-with-Azure-DevOps/" data-id="ck93prm0p0007u0yg30jm8h3q" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/" class="article-date">
+  <time datetime="2018-11-28T23:00:00.000Z" itemprop="datePublished">2018-11-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I was recently working at an async method which could possibly hang if some dependent stuff did not happen. To prevent the method from hanging, I wanted to implement some kind of timeout. Now, how can I make a task abort, given the following method signature?</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class SomeClient</span><br><span class="line">&#123;</span><br><span class="line">    public async Task DoStuffAsync(CancellationToken? ct &#x3D; null)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Take-One-Task-Extension-Method"><a href="#Take-One-Task-Extension-Method" class="headerlink" title="Take One - Task Extension Method"></a>Take One - Task Extension Method</h2><p>The plan was to implement som kind of extension method to Task which could add the timeout-functionality.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">internal static class TaskExtensions</span><br><span class="line">&#123;</span><br><span class="line">    public static async Task TimeoutAfter(</span><br><span class="line">        this Task task, int millisecondsTimeout, CancellationToken ct)</span><br><span class="line">    &#123;</span><br><span class="line">        var completedTask &#x3D; await Task.WhenAny(</span><br><span class="line">            task, Task.Delay(millisecondsTimeout, ct));</span><br><span class="line">        if (completedTask &#x3D;&#x3D; task)</span><br><span class="line">            return;</span><br><span class="line">        throw new TimeoutException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>And use it like this.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class SomeClient</span><br><span class="line">&#123;</span><br><span class="line">    public async Task DoStuffAsync(</span><br><span class="line">        CancellationToken? ct &#x3D; null, int millisecondsTimeout &#x3D; 20_0000)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">        var notNullCt &#x3D; ct ?? CancellationToken.None;</span><br><span class="line">        await DoStuffInnerAsync(notNullCt).TimeoutAfter(</span><br><span class="line">            millisecondsTimeout, notNullCt);</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private async Task DoStuffInnerAsync(CancellationToken ct)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This design allowed that the internal <code>Delay</code>-task would be cancelled if the user of my API canceled the method call. Nice! But it also had some mayor disadvantages:</p>
+<ul>
+<li>No task will be canceled if either of them finish successfully, which leads to having tasks running in the background for no reason, eating system resources.</li>
+<li>I had to make sure to pass the same cancellation token both to <code>DoStuffInnerAsync</code> and <code>TimeoutAfter</code>, which might be something that could lead to mistakes further down.</li>
+</ul>
+<h2 id="Take-Two-Expanding-the-Extension-Method"><a href="#Take-Two-Expanding-the-Extension-Method" class="headerlink" title="Take Two - Expanding the Extension Method"></a>Take Two - Expanding the Extension Method</h2><p>To be able to cancel the <code>TimeoutAfter</code>-task i needed a <code>CancellationTokenSource</code>-instance, and pass its token to the <code>TimeoutAfter</code>-method. And I also wanted the <code>TimeoutAfter</code>-task to cancel if the user canceled the public API call.</p>
+<p>This is what I came up with.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">internal static class TaskExtensions</span><br><span class="line">&#123;</span><br><span class="line">    public static async Task TimeoutAfter(</span><br><span class="line">        this Task task, int millisecondsTimeout, CancellationToken ct)</span><br><span class="line">    &#123;</span><br><span class="line">        using (var cts &#x3D; new CancellationTokenSource())</span><br><span class="line">        &#123;</span><br><span class="line">            using (ct.Register(() &#x3D;&gt; cts.Cancel()))</span><br><span class="line">            &#123;</span><br><span class="line">                var completedTask &#x3D; await Task.WhenAny(</span><br><span class="line">                    task, Task.Delay(millisecondsTimeout, cts.Token));</span><br><span class="line">                if (completedTask &#x3D;&#x3D; task)</span><br><span class="line">                &#123;</span><br><span class="line">                    cts.Cancel();</span><br><span class="line">                    return;</span><br><span class="line">                &#125;</span><br><span class="line">                throw new TimeoutException();                    </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This is some seriously dangerous programming.</p>
+<ul>
+<li>By subscribing to cancel-events with <code>ct.Register(...)</code> I opened upp the possibility for memory leaks if I do not unsubscribe somehow.</li>
+<li>Also, using <code>cts</code> (which can be disposed) in the delegate passed to <code>ct.Register(...)</code> might actually make my application crash if <code>ct</code> was canceled outside of the <code>TimeOutAfter</code>-method scope.</li>
+</ul>
+<p><code>Register</code> returns a disposable something, which when disposed will unsubscribe. By adding the inner using-block, I fixed both of these problems.</p>
+<p>This made it possible to cancel the <code>Delay</code>-task when the actual task completed, but not the reverse. How should I solve the bigger problem, how to cancel the actual task if it would hang? Eating up system resources indefinitely…</p>
+<h2 id="Take-Three-Changing-the-Public-API"><a href="#Take-Three-Changing-the-Public-API" class="headerlink" title="Take Three - Changing the Public API"></a>Take Three - Changing the Public API</h2><p>With much hesitation I finally decided to make a breaking change to the public API by replacing the <code>CancellationToken</code> with a <code>CancellationTokenSource</code> in the <code>DoStuffAsync</code>-method.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class SomeClient</span><br><span class="line">&#123;</span><br><span class="line">    public async Task DoStuffAsync(</span><br><span class="line">        CancellationTokenSource cts &#x3D; null, int millisecondsTimeout &#x3D; 20_0000)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">        var notNullCts &#x3D; cts ?? new CancellationTokenSource();</span><br><span class="line">        await DoStuffInnerAsync(notNullCts.Token).TimeoutAfter(</span><br><span class="line">            millisecondsTimeout, notNullCts);</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private async Task DoStuffInnerAsync(CancellationToken ct)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">internal static class TaskExtensions</span><br><span class="line">&#123;</span><br><span class="line">    public static async Task TimeoutAfter(</span><br><span class="line">        this Task task, int millisecondsTimeout, CancellationTokenSource cts)</span><br><span class="line">    &#123;</span><br><span class="line">        var completedTask &#x3D; await Task.WhenAny(</span><br><span class="line">            task, Task.Delay(millisecondsTimeout, cts.Token));</span><br><span class="line">        if (completedTask &#x3D;&#x3D; task)</span><br><span class="line">        &#123;</span><br><span class="line">            cts.Cancel();</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        cts.Cancel();</span><br><span class="line">        throw new TimeoutException();                    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Nice! But this still did not solve that I had make sure to pass the same <code>cts</code> to both the actual task and the <code>Delay</code>-task.</p>
+<h2 id="Final-Solution-Doing-the-Obvious"><a href="#Final-Solution-Doing-the-Obvious" class="headerlink" title="Final Solution - Doing the Obvious"></a>Final Solution - Doing the Obvious</h2><p>Most things is really easy when you know the answer. By accident I stumbled upon that <code>CancellationTokenSource</code> has a <code>CancelAfter(...)</code>-method. This solves my problem entirely without the need to update my public API.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var client &#x3D; new SomeClient();</span><br><span class="line">var cts &#x3D; new CancellationTokenSource();</span><br><span class="line">cts.CancelAfter(20_000);</span><br><span class="line">await client.DoStuffAsync(cts.Token);</span><br></pre></td></tr></table></figure>
+
+<p>Easy peasy. I wish I had known about this earlier!</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/" data-id="ck93puyfp00006sygb3y36uth" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/" class="article-date">
+  <time datetime="2015-05-15T22:00:00.000Z" itemprop="datePublished">2015-05-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/">Avoid Connection String Transforms With SQL Client Alias</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Your reality as a programmer if often that the application that you and your team are writing is going to be run on a number of test- and production environments. The normal case is that these contain computers with different names and/or DNS addresses.</p>
+<p>This means that your application configuration needs to be different on each and every environment. There exists a bunch of tools to solve this problem, and it is usually done with transformation of configuration files. Ouch! </p>
+<p>Now, can you imagine a world where transformations of configuration files are not needed? At least not due to different addresses to the database server.</p>
+<h2 id="SQL-Native-Client-Alias"><a href="#SQL-Native-Client-Alias" class="headerlink" title="SQL Native Client Alias"></a>SQL Native Client Alias</h2><p>A feature of SQL Server is that its clients can use aliases for database instances. You can call an alias whatever you want, and it can be run over either TCP or Named Pipes. This is not a miracle per se, since similar functionality can be achieved with help of a DNS-server, or why not an entry in the Windows host file.</p>
+<p>What a SQL Client Alias can do that none other can, is to point out a named database instance on a target computer. But most importantly, configuring an alias does not require any out of the ordinary access rights (administrative rights to be precise). Developers does not typically have access to tamper with the company DNS server, and are usually too lazy to install their own…</p>
+<p>Something that is a bit troublesome with SQL Client Aliases is that there exists 32- and 64-bit versions. It would have been reasonable that they shared the same list of configured aliases, but they do not. If you have both types of applications, you have to configure your alias twice.</p>
+<h3 id="Configuring-with-SQL-Server-Configuration-Manager"><a href="#Configuring-with-SQL-Server-Configuration-Manager" class="headerlink" title="Configuring with SQL Server Configuration Manager"></a>Configuring with SQL Server Configuration Manager</h3><p>To be able to connect to a SQL Server through an alias, the server needs to enable access over either Named Pipes or TCP/IP. This can be done by fiddling in SQL Server Configuration Manager, followed by a restart of the SQL Server service.</p>
+<p><img src="./sql-alias-enable-protocols.png" alt="Enable SQL Server Protocols"></p>
+<p>Then to create a new alias, enter it under one of the nodes named SQL Native Client 11.0 Configuration, like so.</p>
+<p><img src="./sql-alias-enable-sscm-alias.png" alt="Set SQL Client Alias With SSCM"></p>
+<p>The good part with this method of configuring an alias is that you will probably be able to remember how to start SQL Server Configuration Manager, but the bad part is that it will only be available on a computer that has the features Client Components and Management Tools of SQL Server installed. </p>
+<p>Having SQL Server installed on your development machine is fine, but what if you do not want to install it on environment client machines?</p>
+<h3 id="Configuring-with-cliconfg-exe"><a href="#Configuring-with-cliconfg-exe" class="headerlink" title="Configuring with cliconfg.exe"></a>Configuring with cliconfg.exe</h3><p>Since Windows 2000-isch, an application called <code>cliconfig.exe</code> has come bundled with Windows which can be used to configure SQL Client Aliases. Nice! Sounds promising.</p>
+<p>You can start it by running <code>cliconfig.exe</code> from the Run Dialog, since it is already included in PATH. Wait… If only it was that easy. You need to be aware of that when run like this on a 32-bit OS, the 32-bit <code>cliconfig.exe</code> will be run. Naturally on a 64-bit OS, the 64-bit version will be run. You must consider which version your applications actually require and start the same version of <code>cliconfig.exe</code>.</p>
+<p><img src="./sql-alias-enable-cliconfig-alias.png" alt="Set SQL Client Alias With cliconfig.exe"></p>
+<p>To start a specific version, please use the following paths (no, they are not mixed up): </p>
+<ul>
+<li>32-bit, <code>C:\windows\syswow64\cliconfg.exe</code></li>
+<li>64-bit, <code>C:\windows\system32\cliconfg.exe</code></li>
+</ul>
+<p>Ouch again! To have to configure both 32- and 64-bit aliases is a pain, is there no better way to do this? </p>
+<h3 id="PowerShell-to-the-rescue"><a href="#PowerShell-to-the-rescue" class="headerlink" title="PowerShell to the rescue"></a>PowerShell to the rescue</h3><p>Luckily, configured aliases are stored in the Windows registry. Therefore it is possible to automate the task of setting up SQL Client Alias with PowerShell.</p>
+<p>An example of how this can be done: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function Set-SqlClientAlias &#123;</span><br><span class="line">    param(</span><br><span class="line">        [Parameter(Position&#x3D;0, Mandatory&#x3D;$true)]</span><br><span class="line">        [string]$Alias,</span><br><span class="line">        [Parameter(Position&#x3D;1, Mandatory&#x3D;$true)]</span><br><span class="line">        [string]$Instance,</span><br><span class="line">        [Parameter(Position&#x3D;2, Mandatory&#x3D;$false)]</span><br><span class="line">        [int]$Port &#x3D; -1</span><br><span class="line">    )</span><br><span class="line">    function Set-RegistryValue([string]$Path, [string]$Name, [string]$Value) &#123;</span><br><span class="line">        if (-not (Test-Path $Path)) &#123;</span><br><span class="line">            New-Item $Path | Out-Null</span><br><span class="line">        &#125;</span><br><span class="line">        New-ItemProperty -Path $Path -Name $Name -PropertyType String -Value $Value -Force | Out-Null</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $x86Path &#x3D; &quot;HKLM:\Software\Microsoft\MSSQLServer\Client\ConnectTo&quot;</span><br><span class="line">    $x64Path &#x3D; &quot;HKLM:\Software\Wow6432Node\Microsoft\MSSQLServer\Client\ConnectTo&quot;</span><br><span class="line">    $Value &#x3D; &quot;DBMSSOCN,$Instance&quot; # DBMSSOCN &#x3D;&gt; TCP&#x2F;IP</span><br><span class="line">    if ($Port -ne -1) &#123;</span><br><span class="line">        $Value +&#x3D; &quot;,$Port&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Set-RegistryValue -Path $x86Path -Name $Alias -Value $Value</span><br><span class="line">    Set-RegistryValue -Path $x64Path -Name $Alias -Value $Value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>I have intentionally left out the ability to use the Named Pipe protocol since I think it is not of much use in this case. Databases are often run on dedicated servers, so your application cannot talk to them with pipes anyway. If you really want to use Named Pipes anyway the registry item value should look something like <code>DBNMPNTW,\\myserver\pipe\sql\query</code>.</p>
+<p>I wish you a pleasant configuration experience! :)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/" data-id="ck93pvv4q00016syg414jg5su" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/">Avoid Connection String Transforms With SQL Client Alias</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
 </html>

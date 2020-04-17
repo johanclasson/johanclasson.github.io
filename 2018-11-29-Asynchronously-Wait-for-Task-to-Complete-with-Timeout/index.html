@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Asynchronously Wait for Task to Complete With Timeout | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Most things is really easy when you know the answer. This is a story of how i struggled, making a complicated solution to a simple problem.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Asynchronously Wait for Task to Complete With Timeout">
+<meta property="og:url" content="https://blog.classon.eu/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="Most things is really easy when you know the answer. This is a story of how i struggled, making a complicated solution to a simple problem.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-11-28T23:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T04:52:36.177Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/" class="article-date">
+  <time datetime="2018-11-28T23:00:00.000Z" itemprop="datePublished">2018-11-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Asynchronously Wait for Task to Complete With Timeout
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I was recently working at an async method which could possibly hang if some dependent stuff did not happen. To prevent the method from hanging, I wanted to implement some kind of timeout. Now, how can I make a task abort, given the following method signature?</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class SomeClient</span><br><span class="line">&#123;</span><br><span class="line">    public async Task DoStuffAsync(CancellationToken? ct &#x3D; null)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Take-One-Task-Extension-Method"><a href="#Take-One-Task-Extension-Method" class="headerlink" title="Take One - Task Extension Method"></a>Take One - Task Extension Method</h2><p>The plan was to implement som kind of extension method to Task which could add the timeout-functionality.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">internal static class TaskExtensions</span><br><span class="line">&#123;</span><br><span class="line">    public static async Task TimeoutAfter(</span><br><span class="line">        this Task task, int millisecondsTimeout, CancellationToken ct)</span><br><span class="line">    &#123;</span><br><span class="line">        var completedTask &#x3D; await Task.WhenAny(</span><br><span class="line">            task, Task.Delay(millisecondsTimeout, ct));</span><br><span class="line">        if (completedTask &#x3D;&#x3D; task)</span><br><span class="line">            return;</span><br><span class="line">        throw new TimeoutException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>And use it like this.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class SomeClient</span><br><span class="line">&#123;</span><br><span class="line">    public async Task DoStuffAsync(</span><br><span class="line">        CancellationToken? ct &#x3D; null, int millisecondsTimeout &#x3D; 20_0000)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">        var notNullCt &#x3D; ct ?? CancellationToken.None;</span><br><span class="line">        await DoStuffInnerAsync(notNullCt).TimeoutAfter(</span><br><span class="line">            millisecondsTimeout, notNullCt);</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private async Task DoStuffInnerAsync(CancellationToken ct)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This design allowed that the internal <code>Delay</code>-task would be cancelled if the user of my API canceled the method call. Nice! But it also had some mayor disadvantages:</p>
+<ul>
+<li>No task will be canceled if either of them finish successfully, which leads to having tasks running in the background for no reason, eating system resources.</li>
+<li>I had to make sure to pass the same cancellation token both to <code>DoStuffInnerAsync</code> and <code>TimeoutAfter</code>, which might be something that could lead to mistakes further down.</li>
+</ul>
+<h2 id="Take-Two-Expanding-the-Extension-Method"><a href="#Take-Two-Expanding-the-Extension-Method" class="headerlink" title="Take Two - Expanding the Extension Method"></a>Take Two - Expanding the Extension Method</h2><p>To be able to cancel the <code>TimeoutAfter</code>-task i needed a <code>CancellationTokenSource</code>-instance, and pass its token to the <code>TimeoutAfter</code>-method. And I also wanted the <code>TimeoutAfter</code>-task to cancel if the user canceled the public API call.</p>
+<p>This is what I came up with.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">internal static class TaskExtensions</span><br><span class="line">&#123;</span><br><span class="line">    public static async Task TimeoutAfter(</span><br><span class="line">        this Task task, int millisecondsTimeout, CancellationToken ct)</span><br><span class="line">    &#123;</span><br><span class="line">        using (var cts &#x3D; new CancellationTokenSource())</span><br><span class="line">        &#123;</span><br><span class="line">            using (ct.Register(() &#x3D;&gt; cts.Cancel()))</span><br><span class="line">            &#123;</span><br><span class="line">                var completedTask &#x3D; await Task.WhenAny(</span><br><span class="line">                    task, Task.Delay(millisecondsTimeout, cts.Token));</span><br><span class="line">                if (completedTask &#x3D;&#x3D; task)</span><br><span class="line">                &#123;</span><br><span class="line">                    cts.Cancel();</span><br><span class="line">                    return;</span><br><span class="line">                &#125;</span><br><span class="line">                throw new TimeoutException();                    </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This is some seriously dangerous programming.</p>
+<ul>
+<li>By subscribing to cancel-events with <code>ct.Register(...)</code> I opened upp the possibility for memory leaks if I do not unsubscribe somehow.</li>
+<li>Also, using <code>cts</code> (which can be disposed) in the delegate passed to <code>ct.Register(...)</code> might actually make my application crash if <code>ct</code> was canceled outside of the <code>TimeOutAfter</code>-method scope.</li>
+</ul>
+<p><code>Register</code> returns a disposable something, which when disposed will unsubscribe. By adding the inner using-block, I fixed both of these problems.</p>
+<p>This made it possible to cancel the <code>Delay</code>-task when the actual task completed, but not the reverse. How should I solve the bigger problem, how to cancel the actual task if it would hang? Eating up system resources indefinitely…</p>
+<h2 id="Take-Three-Changing-the-Public-API"><a href="#Take-Three-Changing-the-Public-API" class="headerlink" title="Take Three - Changing the Public API"></a>Take Three - Changing the Public API</h2><p>With much hesitation I finally decided to make a breaking change to the public API by replacing the <code>CancellationToken</code> with a <code>CancellationTokenSource</code> in the <code>DoStuffAsync</code>-method.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public class SomeClient</span><br><span class="line">&#123;</span><br><span class="line">    public async Task DoStuffAsync(</span><br><span class="line">        CancellationTokenSource cts &#x3D; null, int millisecondsTimeout &#x3D; 20_0000)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">        var notNullCts &#x3D; cts ?? new CancellationTokenSource();</span><br><span class="line">        await DoStuffInnerAsync(notNullCts.Token).TimeoutAfter(</span><br><span class="line">            millisecondsTimeout, notNullCts);</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private async Task DoStuffInnerAsync(CancellationToken ct)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">internal static class TaskExtensions</span><br><span class="line">&#123;</span><br><span class="line">    public static async Task TimeoutAfter(</span><br><span class="line">        this Task task, int millisecondsTimeout, CancellationTokenSource cts)</span><br><span class="line">    &#123;</span><br><span class="line">        var completedTask &#x3D; await Task.WhenAny(</span><br><span class="line">            task, Task.Delay(millisecondsTimeout, cts.Token));</span><br><span class="line">        if (completedTask &#x3D;&#x3D; task)</span><br><span class="line">        &#123;</span><br><span class="line">            cts.Cancel();</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        cts.Cancel();</span><br><span class="line">        throw new TimeoutException();                    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Nice! But this still did not solve that I had make sure to pass the same <code>cts</code> to both the actual task and the <code>Delay</code>-task.</p>
+<h2 id="Final-Solution-Doing-the-Obvious"><a href="#Final-Solution-Doing-the-Obvious" class="headerlink" title="Final Solution - Doing the Obvious"></a>Final Solution - Doing the Obvious</h2><p>Most things is really easy when you know the answer. By accident I stumbled upon that <code>CancellationTokenSource</code> has a <code>CancelAfter(...)</code>-method. This solves my problem entirely without the need to update my public API.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var client &#x3D; new SomeClient();</span><br><span class="line">var cts &#x3D; new CancellationTokenSource();</span><br><span class="line">cts.CancelAfter(20_000);</span><br><span class="line">await client.DoStuffAsync(cts.Token);</span><br></pre></td></tr></table></figure>
+
+<p>Easy peasy. I wish I had known about this earlier!</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/" data-id="ck93puyfp00006sygb3y36uth" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Release Notes With Azure DevOps
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Avoid Connection String Transforms With SQL Client Alias</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/">Avoid Connection String Transforms With SQL Client Alias</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

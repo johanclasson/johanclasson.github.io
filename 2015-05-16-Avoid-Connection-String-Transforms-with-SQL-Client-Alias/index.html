@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Avoid Connection String Transforms With SQL Client Alias | Johan Classon Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="SQL Client Alias can be set with SSCM, cliconfig.exe, or by least effort PowerShell. It will help you avoid transforms for your application configuration.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Avoid Connection String Transforms With SQL Client Alias">
+<meta property="og:url" content="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/index.html">
+<meta property="og:site_name" content="Johan Classon Blog">
+<meta property="og:description" content="SQL Client Alias can be set with SSCM, cliconfig.exe, or by least effort PowerShell. It will help you avoid transforms for your application configuration.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/sql-alias-enable-protocols.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/sql-alias-enable-sscm-alias.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/sql-alias-enable-cliconfig-alias.png">
+<meta property="article:published_time" content="2015-05-15T22:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-17T04:53:18.551Z">
+<meta property="article:author" content="Johan Classon">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/sql-alias-enable-protocols.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Johan Classon Blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://blog.classon.eu"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/" class="article-date">
+  <time datetime="2015-05-15T22:00:00.000Z" itemprop="datePublished">2015-05-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Avoid Connection String Transforms With SQL Client Alias
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Your reality as a programmer if often that the application that you and your team are writing is going to be run on a number of test- and production environments. The normal case is that these contain computers with different names and/or DNS addresses.</p>
+<p>This means that your application configuration needs to be different on each and every environment. There exists a bunch of tools to solve this problem, and it is usually done with transformation of configuration files. Ouch! </p>
+<p>Now, can you imagine a world where transformations of configuration files are not needed? At least not due to different addresses to the database server.</p>
+<h2 id="SQL-Native-Client-Alias"><a href="#SQL-Native-Client-Alias" class="headerlink" title="SQL Native Client Alias"></a>SQL Native Client Alias</h2><p>A feature of SQL Server is that its clients can use aliases for database instances. You can call an alias whatever you want, and it can be run over either TCP or Named Pipes. This is not a miracle per se, since similar functionality can be achieved with help of a DNS-server, or why not an entry in the Windows host file.</p>
+<p>What a SQL Client Alias can do that none other can, is to point out a named database instance on a target computer. But most importantly, configuring an alias does not require any out of the ordinary access rights (administrative rights to be precise). Developers does not typically have access to tamper with the company DNS server, and are usually too lazy to install their own…</p>
+<p>Something that is a bit troublesome with SQL Client Aliases is that there exists 32- and 64-bit versions. It would have been reasonable that they shared the same list of configured aliases, but they do not. If you have both types of applications, you have to configure your alias twice.</p>
+<h3 id="Configuring-with-SQL-Server-Configuration-Manager"><a href="#Configuring-with-SQL-Server-Configuration-Manager" class="headerlink" title="Configuring with SQL Server Configuration Manager"></a>Configuring with SQL Server Configuration Manager</h3><p>To be able to connect to a SQL Server through an alias, the server needs to enable access over either Named Pipes or TCP/IP. This can be done by fiddling in SQL Server Configuration Manager, followed by a restart of the SQL Server service.</p>
+<p><img src="./sql-alias-enable-protocols.png" alt="Enable SQL Server Protocols"></p>
+<p>Then to create a new alias, enter it under one of the nodes named SQL Native Client 11.0 Configuration, like so.</p>
+<p><img src="./sql-alias-enable-sscm-alias.png" alt="Set SQL Client Alias With SSCM"></p>
+<p>The good part with this method of configuring an alias is that you will probably be able to remember how to start SQL Server Configuration Manager, but the bad part is that it will only be available on a computer that has the features Client Components and Management Tools of SQL Server installed. </p>
+<p>Having SQL Server installed on your development machine is fine, but what if you do not want to install it on environment client machines?</p>
+<h3 id="Configuring-with-cliconfg-exe"><a href="#Configuring-with-cliconfg-exe" class="headerlink" title="Configuring with cliconfg.exe"></a>Configuring with cliconfg.exe</h3><p>Since Windows 2000-isch, an application called <code>cliconfig.exe</code> has come bundled with Windows which can be used to configure SQL Client Aliases. Nice! Sounds promising.</p>
+<p>You can start it by running <code>cliconfig.exe</code> from the Run Dialog, since it is already included in PATH. Wait… If only it was that easy. You need to be aware of that when run like this on a 32-bit OS, the 32-bit <code>cliconfig.exe</code> will be run. Naturally on a 64-bit OS, the 64-bit version will be run. You must consider which version your applications actually require and start the same version of <code>cliconfig.exe</code>.</p>
+<p><img src="./sql-alias-enable-cliconfig-alias.png" alt="Set SQL Client Alias With cliconfig.exe"></p>
+<p>To start a specific version, please use the following paths (no, they are not mixed up): </p>
+<ul>
+<li>32-bit, <code>C:\windows\syswow64\cliconfg.exe</code></li>
+<li>64-bit, <code>C:\windows\system32\cliconfg.exe</code></li>
+</ul>
+<p>Ouch again! To have to configure both 32- and 64-bit aliases is a pain, is there no better way to do this? </p>
+<h3 id="PowerShell-to-the-rescue"><a href="#PowerShell-to-the-rescue" class="headerlink" title="PowerShell to the rescue"></a>PowerShell to the rescue</h3><p>Luckily, configured aliases are stored in the Windows registry. Therefore it is possible to automate the task of setting up SQL Client Alias with PowerShell.</p>
+<p>An example of how this can be done: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function Set-SqlClientAlias &#123;</span><br><span class="line">    param(</span><br><span class="line">        [Parameter(Position&#x3D;0, Mandatory&#x3D;$true)]</span><br><span class="line">        [string]$Alias,</span><br><span class="line">        [Parameter(Position&#x3D;1, Mandatory&#x3D;$true)]</span><br><span class="line">        [string]$Instance,</span><br><span class="line">        [Parameter(Position&#x3D;2, Mandatory&#x3D;$false)]</span><br><span class="line">        [int]$Port &#x3D; -1</span><br><span class="line">    )</span><br><span class="line">    function Set-RegistryValue([string]$Path, [string]$Name, [string]$Value) &#123;</span><br><span class="line">        if (-not (Test-Path $Path)) &#123;</span><br><span class="line">            New-Item $Path | Out-Null</span><br><span class="line">        &#125;</span><br><span class="line">        New-ItemProperty -Path $Path -Name $Name -PropertyType String -Value $Value -Force | Out-Null</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $x86Path &#x3D; &quot;HKLM:\Software\Microsoft\MSSQLServer\Client\ConnectTo&quot;</span><br><span class="line">    $x64Path &#x3D; &quot;HKLM:\Software\Wow6432Node\Microsoft\MSSQLServer\Client\ConnectTo&quot;</span><br><span class="line">    $Value &#x3D; &quot;DBMSSOCN,$Instance&quot; # DBMSSOCN &#x3D;&gt; TCP&#x2F;IP</span><br><span class="line">    if ($Port -ne -1) &#123;</span><br><span class="line">        $Value +&#x3D; &quot;,$Port&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Set-RegistryValue -Path $x86Path -Name $Alias -Value $Value</span><br><span class="line">    Set-RegistryValue -Path $x64Path -Name $Alias -Value $Value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>I have intentionally left out the ability to use the Named Pipe protocol since I think it is not of much use in this case. Databases are often run on dedicated servers, so your application cannot talk to them with pipes anyway. If you really want to use Named Pipes anyway the registry item value should look something like <code>DBNMPNTW,\\myserver\pipe\sql\query</code>.</p>
+<p>I wish you a pleasant configuration experience! :)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/" data-id="ck93pvv4q00016syg414jg5su" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Asynchronously Wait for Task to Complete With Timeout
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">May 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+          </li>
+        
+          <li>
+            <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+          </li>
+        
+          <li>
+            <a href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/">Avoid Connection String Transforms With SQL Client Alias</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Johan Classon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

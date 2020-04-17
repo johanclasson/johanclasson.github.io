@@ -16,11 +16,11 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-pobacklog.png">
 <meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-team1backlog.png">
-<meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/%22./dirtyharryplanningwithtfs-team2backlog.png">
+<meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-team2backlog.png">
 <meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-rootbacklog.png">
 <meta property="og:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-excel.png">
 <meta property="article:published_time" content="2015-05-04T22:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-17T07:00:29.889Z">
+<meta property="article:modified_time" content="2020-04-17T08:03:37.692Z">
 <meta property="article:author" content="Johan Classon">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-pobacklog.png">
@@ -129,21 +129,21 @@
 <p>Planning for the future and grooming activities are performed in the PO team, which results in clean backlogs for the other two teams. Most of the time, they will only contain items from the current sprint. This makes the Backlog Items Board usable in the iteration. The combined status of the teams can be examined through the Root Team backlog.</p>
 <h3 id="Customizing-Kanban-Columns"><a href="#Customizing-Kanban-Columns" class="headerlink" title="Customizing Kanban Columns"></a>Customizing Kanban Columns</h3><p>PBIs and Bugs comes with two types of states. The normal New-Approved-Committed-Done state, and a customizable Kanban state. The latter can be thought of like a sub-state of the normal state. It can unfortunately not be shared across teams, but is an easy way to customize the workflow within a team. The Kanban states are represented by columns in the Backlog Items Board.</p>
 <p>To illustrate what is possible, I have taken screen shots from the respective team backlogs of my example. These can be customized without changing the Scrum Process Template, which means that it does not matter if you run an On Premise TFS installation or in the cloud service Visual Studio Online.</p>
-<h4 id="The-PO-Team-Backlog"><a href="#The-PO-Team-Backlog" class="headerlink" title="The PO Team Backlog"></a>The PO Team Backlog</h4><p><img src="./dirtyharryplanningwithtfs-pobacklog.png" alt="PO backlog"></p>
+<h4 id="The-PO-Team-Backlog"><a href="#The-PO-Team-Backlog" class="headerlink" title="The PO Team Backlog"></a>The PO Team Backlog</h4><p><img src="/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-pobacklog.png" alt="PO backlog"></p>
 <p>The PO Team is responsible for creating new PBIs, which are given the new state by default. The Kanban columns Candidates and Grooming are added as sub-states of New. When a PBI is detailed enough so that work can be started it is moved to the Approved column which sets the Approved state. The PBI will not show up in a team backlog until it is moved to the area path of a team.</p>
 <p>Note that the Business Value field is added in the cards because it gives great meaning for the PO Team.</p>
-<h4 id="The-Team-1-Backlog"><a href="#The-Team-1-Backlog" class="headerlink" title="The Team 1 Backlog"></a>The Team 1 Backlog</h4><p><img src="./dirtyharryplanningwithtfs-team1backlog.png" alt="Team 1 Backlog"></p>
+<h4 id="The-Team-1-Backlog"><a href="#The-Team-1-Backlog" class="headerlink" title="The Team 1 Backlog"></a>The Team 1 Backlog</h4><p><img src="/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-team1backlog.png" alt="Team 1 Backlog"></p>
 <p>The Team 1 and 2 are responsible for implementing approved PBIs from the PO Team. PBIs which are committed to during a sprint is moved to the Committed state. The Approved state is not shown in the Board since sprint planning is normally done in the Backlog- and not in the Board view.</p>
 <p>The Kanban columns Implemented and Testable are added as sub-states of Commited. When tests are passed PBIs are moved to the Done column which sets the Done state.</p>
-<h4 id="The-Team-2-Backlog"><a href="#The-Team-2-Backlog" class="headerlink" title="The Team 2 Backlog"></a>The Team 2 Backlog</h4><p><img src="%22./dirtyharryplanningwithtfs-team2backlog.png" alt="Team 2 Backlog"></p>
+<h4 id="The-Team-2-Backlog"><a href="#The-Team-2-Backlog" class="headerlink" title="The Team 2 Backlog"></a>The Team 2 Backlog</h4><p><img src="/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-team2backlog.png" alt="Team 2 Backlog"></p>
 <p>Here the Kanban columns In Process and Testable are added as sub-states of Committed. In Process use the Split Column functionality.</p>
-<h4 id="The-Root-Team-Backlog"><a href="#The-Root-Team-Backlog" class="headerlink" title="The Root Team Backlog"></a>The Root Team Backlog</h4><p><img src="./dirtyharryplanningwithtfs-rootbacklog.png" alt="Root Team Backlog"></p>
+<h4 id="The-Root-Team-Backlog"><a href="#The-Root-Team-Backlog" class="headerlink" title="The Root Team Backlog"></a>The Root Team Backlog</h4><p><img src="/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-rootbacklog.png" alt="Root Team Backlog"></p>
 <p>The Root Team is not used to do any real work but only view the combined backlogs of Team 1 and 2. Since Kanban states are not shared cross teams there is no use adding any extra columns to the board.</p>
 <p>Because work items are included from different teams it gives meaning to display the area path on the cards.</p>
 <h3 id="Using-Excel-to-Move-PBIs-between-Areas"><a href="#Using-Excel-to-Move-PBIs-between-Areas" class="headerlink" title="Using Excel to Move PBIs between Areas"></a>Using Excel to Move PBIs between Areas</h3><p>A nice feature of TFS is that you can edit work items through Excel. In short it gets a list of work items from a Query and lets you edit them all in a spreadsheet instead of doing it one by one. It also lets you create new work items or change parent-child relations.</p>
 <p>To use this feature you have to have Excel (obviously) and Visual Studio installed. You can read in the <a href="https://msdn.microsoft.com/en-us/library/ms181675.aspx" target="_blank" rel="noopener">instructions on MSDN</a> that it is sufficient to install Team Explorer if you do not already have Visual Studio installed, although I have never tried that for myself.</p>
 <p>To get started simply open Excel, under Team ribbon click New List, Select your Query and you are good to go. When you are done editing press Publish to upload your changes to TFS.</p>
-<p><img src="./dirtyharryplanningwithtfs-excel.png" alt="Edit Work Items with Excel"></p>
+<p><img src="/2015-05-05-Dirty-Harry-Planning-with-TFS/dirtyharryplanningwithtfs-excel.png" alt="Edit Work Items with Excel"></p>
 <p>Using the TFS spreadsheet functionality is the most convenient way to move approved PBIs from the PO Team to one of backlogs of Team 1 or 2.</p>
 <h3 id="Final-comment"><a href="#Final-comment" class="headerlink" title="Final comment"></a>Final comment</h3><p>Note that there are intentionally no iterations in my example. I did not check any iterations because I would like to help (or force if you are fond of strong words) the teams to keep their PBIs in order.</p>
 <p>Happy planning!</p>

@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/sql-alias-enable-sscm-alias.png">
 <meta property="og:image" content="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/sql-alias-enable-cliconfig-alias.png">
 <meta property="article:published_time" content="2015-05-15T22:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-17T04:53:18.551Z">
+<meta property="article:modified_time" content="2020-04-17T08:04:51.777Z">
 <meta property="article:author" content="Johan Classon">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/sql-alias-enable-protocols.png">
@@ -99,14 +99,14 @@
 <p>What a SQL Client Alias can do that none other can, is to point out a named database instance on a target computer. But most importantly, configuring an alias does not require any out of the ordinary access rights (administrative rights to be precise). Developers does not typically have access to tamper with the company DNS server, and are usually too lazy to install their own…</p>
 <p>Something that is a bit troublesome with SQL Client Aliases is that there exists 32- and 64-bit versions. It would have been reasonable that they shared the same list of configured aliases, but they do not. If you have both types of applications, you have to configure your alias twice.</p>
 <h3 id="Configuring-with-SQL-Server-Configuration-Manager"><a href="#Configuring-with-SQL-Server-Configuration-Manager" class="headerlink" title="Configuring with SQL Server Configuration Manager"></a>Configuring with SQL Server Configuration Manager</h3><p>To be able to connect to a SQL Server through an alias, the server needs to enable access over either Named Pipes or TCP/IP. This can be done by fiddling in SQL Server Configuration Manager, followed by a restart of the SQL Server service.</p>
-<p><img src="./sql-alias-enable-protocols.png" alt="Enable SQL Server Protocols"></p>
+<p><img src="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/sql-alias-enable-protocols.png" alt="Enable SQL Server Protocols"></p>
 <p>Then to create a new alias, enter it under one of the nodes named SQL Native Client 11.0 Configuration, like so.</p>
-<p><img src="./sql-alias-enable-sscm-alias.png" alt="Set SQL Client Alias With SSCM"></p>
+<p><img src="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/sql-alias-enable-sscm-alias.png" alt="Set SQL Client Alias With SSCM"></p>
 <p>The good part with this method of configuring an alias is that you will probably be able to remember how to start SQL Server Configuration Manager, but the bad part is that it will only be available on a computer that has the features Client Components and Management Tools of SQL Server installed. </p>
 <p>Having SQL Server installed on your development machine is fine, but what if you do not want to install it on environment client machines?</p>
 <h3 id="Configuring-with-cliconfg-exe"><a href="#Configuring-with-cliconfg-exe" class="headerlink" title="Configuring with cliconfg.exe"></a>Configuring with cliconfg.exe</h3><p>Since Windows 2000-isch, an application called <code>cliconfig.exe</code> has come bundled with Windows which can be used to configure SQL Client Aliases. Nice! Sounds promising.</p>
 <p>You can start it by running <code>cliconfig.exe</code> from the Run Dialog, since it is already included in PATH. Wait… If only it was that easy. You need to be aware of that when run like this on a 32-bit OS, the 32-bit <code>cliconfig.exe</code> will be run. Naturally on a 64-bit OS, the 64-bit version will be run. You must consider which version your applications actually require and start the same version of <code>cliconfig.exe</code>.</p>
-<p><img src="./sql-alias-enable-cliconfig-alias.png" alt="Set SQL Client Alias With cliconfig.exe"></p>
+<p><img src="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/sql-alias-enable-cliconfig-alias.png" alt="Set SQL Client Alias With cliconfig.exe"></p>
 <p>To start a specific version, please use the following paths (no, they are not mixed up): </p>
 <ul>
 <li>32-bit, <code>C:\windows\syswow64\cliconfg.exe</code></li>

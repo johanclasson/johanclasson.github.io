@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/powershell-intellisense-ise-dash.png">
 <meta property="og:image" content="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/powershell-intellisense-ise-type.png">
 <meta property="article:published_time" content="2015-05-11T22:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-17T07:00:29.897Z">
+<meta property="article:modified_time" content="2020-04-17T08:04:04.577Z">
 <meta property="article:author" content="Johan Classon">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/powershell-intellisense-ise-normal.png">
@@ -97,15 +97,15 @@
 <p>I have come to realize that of the capabilities that I value the most, code completion (or ?IntelliSense? as Microsoft calls it) is the most important. When I know the syntax it is relieving to know that what I write is correctly spelled. When I do not know, it is convenient to not have to spam the command prompt with the Get-Command and Get-Member cmdlets.</p>
 <p>Powershell ISE is frankly a quite crappy text editor, but I think it has the best code completion of all PowerShell editors out there. That feature alone makes it a winner.</p>
 <h2 id="How-it-use-PowerShell-ISE-IntelliSense"><a href="#How-it-use-PowerShell-ISE-IntelliSense" class="headerlink" title="How it use PowerShell ISE IntelliSense"></a>How it use PowerShell ISE IntelliSense</h2><p>The IntelliSense menu is often invoked automatically when you write. But if you for example accidently close it, you can get it back by hitting <code>Ctrl + Space</code>.</p>
-<p><img src="./powershell-intellisense-ise-normal.png" alt="An example of Powershell IntelliSense"></p>
+<p><img src="/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/powershell-intellisense-ise-normal.png" alt="An example of Powershell IntelliSense"></p>
 <p>What also works is hitting tab to complete the word to the top suggestion of what is in the IntelliSense list. If it is not what you want you can continue hitting tab to cycle through the suggestions.</p>
 <p>This works on cmdlets, paths, variables, properties and classes of .Net instances, DSC-configuration, and what not. I bet that every PowerShell developer out there are aware. But what at least I did not know of until today is the following two.</p>
 <h3 id="Command-history"><a href="#Command-history" class="headerlink" title="Command history"></a>Command history</h3><p>If you write <code>#</code> followed by <code>Ctrl + Space</code> you get a list of the latest commands which were run in the console.</p>
-<p><img src="./powershell-intellisense-ise-dash.png" alt="Command History with Powershell IntelliSense"></p>
+<p><img src="/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/powershell-intellisense-ise-dash.png" alt="Command History with Powershell IntelliSense"></p>
 <p>This is ideal for inserting commands in your script that you have tested out in the console first. Or when writing commands in the console, you can get the history by other means than hitting the arrow keys repeatedly.</p>
 <h3 id="Completion-of-type-namespace"><a href="#Completion-of-type-namespace" class="headerlink" title="Completion of type namespace"></a>Completion of type namespace</h3><p>As a .Net developer I am used to be able to include all types in a namespace of a resource with the using-statement. Unfortunately, there exist no equivalent in PowerShell. This was a real PITA. At least for me, up until today.</p>
 <p>Powershell IntelliSense can type out the namespace of a type for you. Simply write the class name followed by <code>Ctrl + Space</code> and magic happens.</p>
-<p><img src="./powershell-intellisense-ise-type.png" alt="Type Namespace Completion with PowerShell"></p>
+<p><img src="/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/powershell-intellisense-ise-type.png" alt="Type Namespace Completion with PowerShell"></p>
 <p>In this case <code>[messagebox</code> will be expanded to <code>[System.Windows.Forms.MessageBox</code>. Not that I actually would like to use a WinForms message box in a PowerShell script, but this is just a stupid example.</p>
 <p>To use this functionality with class libraries you have written yourself you need to first import them with either <code>Add-Type</code> or <code>[System.Reflection.Assembly]::Load*</code>-methods.</p>
 <p>I thought this was absolutely thrilling, and I hope you will find it interesting at least! :)</p>

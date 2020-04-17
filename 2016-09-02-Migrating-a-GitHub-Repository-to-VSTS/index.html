@@ -16,7 +16,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.classon.eu/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/GitHubToVSTS.png">
 <meta property="article:published_time" content="2016-09-01T22:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-17T07:00:29.958Z">
+<meta property="article:modified_time" content="2020-04-17T08:07:21.161Z">
 <meta property="article:author" content="Johan Classon">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.classon.eu/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/GitHubToVSTS.png">
@@ -96,7 +96,7 @@
 <h2 id="The-Problem-at-Hand"><a href="#The-Problem-at-Hand" class="headerlink" title="The Problem at Hand"></a>The Problem at Hand</h2><p>What I had to come up with was how to migrate Github Issues and their associated Milestones. The repository I was migrating had not done any Pull Requests, so I could disregard that type of entity completely.</p>
 <p>When I googled around for solutions I found several attempts of using the <a href="https://developer.github.com/v3/" target="_blank" rel="noopener">GitHub REST API</a> to export issues into a CSV-format. In theory, I could use used the Excel TFS plugin to import these CSV-issues into VSTS… But, none of the scripts that I found actually worked the way that I wanted. Not even close.</p>
 <p>So, that left me with the option of doing my own solution. Luckily, that turned out to be a good thing. The result went just the way I wanted it to be.</p>
-<p><img src="./GitHubToVSTS.png" alt="Migrating a GitHub Repository to VSTS"></p>
+<p><img src="/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/GitHubToVSTS.png" alt="Migrating a GitHub Repository to VSTS"></p>
 <h2 id="Migrating-GitHub-Issues-to-VSTS"><a href="#Migrating-GitHub-Issues-to-VSTS" class="headerlink" title="Migrating GitHub Issues to VSTS"></a>Migrating GitHub Issues to VSTS</h2><p>The grand master plan was to use the GitHub REST API to get the information I needed, and to create iterations and work items through the VSTS REST API. To summarize, milestones were to be converted into iterations, and issues into work items.</p>
 <h3 id="Extracting-Information-from-GitHub"><a href="#Extracting-Information-from-GitHub" class="headerlink" title="Extracting Information from GitHub"></a>Extracting Information from GitHub</h3><p>I started out by making a GET request to list all <a href="https://developer.github.com/v3/issues/#list-issues-for-a-repository" target="_blank" rel="noopener">issues for the GitHub repository</a>, but quickly found out that the result was paginated, and I only got the first 30 or so… I had to repeatedly make requests for the next page, whose URL were hiding behind a <a href="https://tools.ietf.org/html/rfc5988#page-6" target="_blank" rel="noopener">Link-header</a> in the response. It actually took me some time to figure this out, and it was not until I finally read the documentation that I discovered it. Note to self, <a href="https://en.wikipedia.org/wiki/RTFM" target="_blank" rel="noopener">RTFM</a>…</p>
 <p>Then I noticed that most descriptions and comments where formatted in markdown. VSTS need to have its content in bare html, so I needed a way to convert the formatting somehow. Lucky me, the GitHub API has <a href="https://developer.github.com/v3/markdown/#render-a-markdown-document-in-raw-mode" target="_blank" rel="noopener">an endpoint just for that purpose</a>!</p>

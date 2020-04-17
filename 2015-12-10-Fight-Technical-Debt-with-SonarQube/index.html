@@ -16,7 +16,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.classon.eu/2015-12-10-Fight-Technical-Debt-with-SonarQube/SonarQube-Example.png">
 <meta property="article:published_time" content="2015-12-09T23:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-17T07:05:25.949Z">
+<meta property="article:modified_time" content="2020-04-17T08:06:36.049Z">
 <meta property="article:author" content="Johan Classon">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.classon.eu/2015-12-10-Fight-Technical-Debt-with-SonarQube/SonarQube-Example.png">
@@ -97,7 +97,7 @@
 <p>However, with the more intelligent analysis of SonarQube, I think it is time to reevaluate that opinion and make use of gated check-in builds again.</p>
 <h2 id="Introduction-to-SonarQube"><a href="#Introduction-to-SonarQube" class="headerlink" title="Introduction to SonarQube"></a>Introduction to SonarQube</h2><p><a href="http://www.sonarqube.org/" target="_blank" rel="noopener">SonarQube</a> is a service that can perform different forms of analysis of your project. It can run code analysis for you, such as FxCop and their own SonarLint. If you need to, <a href="https://github.com/SonarOpenCommunity/sonar-cxx/wiki/Create-Custom-Rules" target="_blank" rel="noopener">you can write custom rules</a> (in XPath format for C#) for any special validation you need to make.</p>
 <p>Information that is produced by a build, such as code coverage and unit test execution results, can be reported to SonarQube. Analysis of that can be made on the entire code base or just on new code. Either from last analysis, or from the last version of the software.</p>
-<p><img src="./SonarQube-Example.png" alt="SonarQube Nemo Instance"></p>
+<p><img src="/2015-12-10-Fight-Technical-Debt-with-SonarQube/SonarQube-Example.png" alt="SonarQube Nemo Instance"></p>
 <p>A great feature of SonarQube is that it can perform trend analysis of these project metrics. Metrics can be used both to visualize how the project has evolved over time, or to set a quality gate that code must pass before it is submitted. For example, SonarQube can be configured so that it is not ok if code coverage is lower than a certain value. It is wise to configure that threshold to be based on metrics from new or changed code since last analysis. This makes it easier to introduce such a rule midway in a project.</p>
 <p>Another nice feature is that it is possible to see the project code with coverage highlighting. Not everyone care to run tests with coverage when they develop, and what is worse, not all have coverage software to begin with. Code coverage <a href="https://www.visualstudio.com/en-us/products/compare-visual-studio-2015-products-vs.aspx" target="_blank" rel="noopener">included in Visual Studio Enterprise</a>, or can be added with third party add-ons such as <a href="https://www.jetbrains.com/dotcover/" target="_blank" rel="noopener">dotCover</a>, but typically cost money.</p>
 <p><em>(There are exceptions though. For example, <a href="http://testdriven.net/download.aspx" target="_blank" rel="noopener">nCover that comes bundled with TestDriven.Net</a> is free for personal and open source development.)</em></p>

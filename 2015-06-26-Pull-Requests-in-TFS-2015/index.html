@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://blog.classon.eu/2015-06-26-Pull-Requests-in-TFS-2015/2.3-Edit-Pull-Request-Details.png">
 <meta property="og:image" content="https://blog.classon.eu/2015-06-26-Pull-Requests-in-TFS-2015/2.4-Pull-Request-Overview.png">
 <meta property="article:published_time" content="2015-06-25T22:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-17T07:11:06.721Z">
+<meta property="article:modified_time" content="2020-04-17T08:05:44.577Z">
 <meta property="article:author" content="Johan Classon">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.classon.eu/2015-06-26-Pull-Requests-in-TFS-2015/2.1-Pull-Request-Settings.png">
@@ -107,16 +107,16 @@
 <p>Under <em>Automatically build pull requests</em> you can select the build definition that you want to be triggered.</p>
 <p>Regarding pull requests in TFS 2015 and VSO, you can do some things which you can’t in GitHub. Under <em>Code review requirements</em> you can enforce that all commits to a branch have to be made through pull requests.</p>
 <p>By default, the user who has made a pull request can’t approve it. If you really want this to be possible you can change this setting here as well.</p>
-<p><img src="./2.1-Pull-Request-Settings.png" alt="Branch policies for pull requests in TFS 2015"></p>
+<p><img src="/2015-06-26-Pull-Requests-in-TFS-2015/2.1-Pull-Request-Settings.png" alt="Branch policies for pull requests in TFS 2015"></p>
 <p>With <em>Add a new path</em> you can require specific reviewers for portions of your code base. For example if you got sensitive files in a specific folder, you can be sure that pull requests that change files in that folder is reviewed by an expert in your team.</p>
 <h2 id="Working-with-Pull-Requests"><a href="#Working-with-Pull-Requests" class="headerlink" title="Working with Pull Requests"></a>Working with Pull Requests</h2><p>If you have read my <a href="http://blog.nethouse.se/2015/07/21/build-your-github-repository-with-vso/" target="_blank" rel="noopener">previous post</a> you know that in my test repository, several of the automatic tests failed. In a villainous attempt to fix this, I created a feature1 branch, and committed and pushed a change to it.</p>
 <h3 id="Create-Pull-Requests"><a href="#Create-Pull-Requests" class="headerlink" title="Create Pull Requests"></a>Create Pull Requests</h3><p>Under the <em>CODE - Pull Requests</em> tab, you can either click <em>New Pull Request</em> in the top left, or the blue <em>Create Pull Request</em> quick button in the middle.</p>
-<p><img src="./2.2-Create-Pull-Request.png" alt="Create a new pull request"></p>
+<p><img src="/2015-06-26-Pull-Requests-in-TFS-2015/2.2-Create-Pull-Request.png" alt="Create a new pull request"></p>
 <p>This opens a page where you can edit details of the pull request which it’s going to be created. Make sure that you select the correct target branch, next to <em>relative to</em>. The description field is prefilled with the commit comments from the source branch.</p>
-<p><img src="./2.3-Edit-Pull-Request-Details.png" alt="Edit pull request details"></p>
+<p><img src="/2015-06-26-Pull-Requests-in-TFS-2015/2.3-Edit-Pull-Request-Details.png" alt="Edit pull request details"></p>
 <p>As you can see, I’ve cheated by commenting out the command to run the automatic tests. For sure, that would make no tests fail!  </p>
 <h3 id="Review-Pull-Requests"><a href="#Review-Pull-Requests" class="headerlink" title="Review Pull Requests"></a>Review Pull Requests</h3><p>Luckily some decent person is likely to review the pull request before it is merged. Under <em>CODE - Pull Requests</em> you can see active pull requests. Clicking the pull request will open it in review mode, looking like this: </p>
-<p><img src="./2.4-Pull-Request-Overview.png" alt="Review pull request"></p>
+<p><img src="/2015-06-26-Pull-Requests-in-TFS-2015/2.4-Pull-Request-Overview.png" alt="Review pull request"></p>
 <p>There you can comment on source code lines and also place general comments. Note the <em>Build succeeded</em> badge in to top right, indicating that all is well. But in this case, if you inspect the <em>details</em> it will be obvious that no tests have been run.</p>
 <p>One could click <em>Complete pull request</em> to accept- and have it merged to the main branch. Then it is a good idea to click <em>Delete source branch</em> to remove the branch, which probably will no longer be used. </p>
 <p>But in this case one should click <em>Abandon</em>, and give the person who made the request a lesson in code ethics…</p>

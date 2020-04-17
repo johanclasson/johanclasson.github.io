@@ -16,7 +16,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.classon.eu/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/ApplySemanticVersioningToAssemblies.png">
 <meta property="article:published_time" content="2015-11-22T23:00:00.000Z">
-<meta property="article:modified_time" content="2020-04-17T07:04:04.270Z">
+<meta property="article:modified_time" content="2020-04-17T08:06:03.689Z">
 <meta property="article:author" content="Johan Classon">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://blog.classon.eu/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/ApplySemanticVersioningToAssemblies.png">
@@ -122,7 +122,7 @@
 <p>If you make a change to a task that you have previously uploaded, you have to bump its version before you upload it again. The server does not allow overwriting the content of an existing version.</p>
 <h2 id="Describing-the-Apply-Semantic-Versioning-to-Assemblies-Build-Task"><a href="#Describing-the-Apply-Semantic-Versioning-to-Assemblies-Build-Task" class="headerlink" title="Describing the Apply Semantic Versioning to Assemblies Build Task"></a>Describing the Apply Semantic Versioning to Assemblies Build Task</h2><p>The solution to my NuGet package versioning problem was to use the build number to set the versions, and to configure the prerelease name in a build task. To make meaningful semantic versions of all three version types of .Net, they are set to different values. I have published the Apply Semantic Versioning to Assemblies task in my <a href="https://github.com/johanclasson/vso-agent-tasks" target="_blank" rel="noopener">VSO-Agent-Tasks GitHub repository</a> so you can make use of it.</p>
 <p>Added as a step in a build, this is how it looks.</p>
-<p><img src="./ApplySemanticVersioningToAssemblies.png" alt="Apply Semantic Versioning to Assemblies User Interface"></p>
+<p><img src="/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/ApplySemanticVersioningToAssemblies.png" alt="Apply Semantic Versioning to Assemblies User Interface"></p>
 <h3 id="The-Three-Assembly-Versions-Supported-by-Net"><a href="#The-Three-Assembly-Versions-Supported-by-Net" class="headerlink" title="The Three Assembly Versions Supported by .Net"></a>The Three Assembly Versions Supported by .Net</h3><p>The <code>AssemblyVersion</code> is the number that is used by a dll to point out a reference to a specific version of another dll. If this version is changed in a newer dll, those references needs to be updated to target that dll instead. If you follow semantic versioning, the first two version numbers are the ones to increase when the public API changes. Therefore it is a good idea to include just those in the assembly version.</p>
 <p>The <code>AssemblyFileVersion</code> is not used by .Net directly, but is instead of value as a historical reference. If you would ever try to figure out from what build a dll has come from, then the assembly file version would help you answer that.</p>
 <p>The <code>AssemblyInformationalVersion</code> is something human-readable that describes a version, for example 1.0-RC1. This can theoretically be whatever text you prefer, but in this task it is only configurable to the format 1.2.3-abc0004. Note that the build number is left padded with zeros. The reason for this is that NuGet sorts prerelease versions alphabetically. Semantic versioning supports Major.Minor.Patch-Prerelease.Build, but NuGet does not. </p>

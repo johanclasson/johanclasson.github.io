@@ -3,23 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-<!-- Google Analytics -->
-<script type="text/javascript">
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163865120-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-ga('create', 'UA-163865120-1', 'auto');
-ga('send', 'pageview');
-
+  gtag('config', 'UA-163865120-1');
 </script>
 <!-- End Google Analytics -->
 
-
   
   <title>Database Migration With DbUp and VSTS | Johan Classon Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="PowerShell is a good way to invoke DbUp for running your migration scripts. DbUp makes it easy to keep both test- and production databases up to date.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Database Migration With DbUp and VSTS">
@@ -36,15 +33,22 @@ ga('send', 'pageview');
     <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="shortcut icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
   
   
 <link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 <body>
   <div id="container">
@@ -79,11 +83,12 @@ ga('send', 'pageview');
     </div>
   </div>
 </header>
+
       <div class="outer">
-        <section id="main"><article id="post-2016-03-14-Database-Migration-with-DbUp-and-VSTS" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-2016-03-14-Database-Migration-with-DbUp-and-VSTS" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2016-03-14-Database-Migration-with-DbUp-and-VSTS/" class="article-date">
-  <time datetime="2016-03-13T23:00:00.000Z" itemprop="datePublished">2016-03-14</time>
+  <time class="dt-published" datetime="2016-03-13T23:00:00.000Z" itemprop="datePublished">2016-03-14</time>
 </a>
     
   </div>
@@ -93,14 +98,14 @@ ga('send', 'pageview');
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
+    <h1 class="p-name article-title" itemprop="headline name">
       Database Migration With DbUp and VSTS
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>All too often I find myself in projects where there is no efficient strategy around updating databases. Databases should be able to be migrated to the latest version without too much effort. If it’s too hard, developers will start sharing databases, or even worse, use a test environment database directly. </p>
 <p>If you usually do migrations by comparing the schema of two databases, now is an opportunity for you to do something better. Besides schema and security, a database also consists of data, and data is troublesome. Large tables takes both time and resources to alter. A tool simply cannot generate resource efficient migrations, or for example figure out where the data in that dropped column should go instead.</p>
@@ -119,13 +124,27 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2016-03-14-Database-Migration-with-DbUp-and-VSTS/" data-id="ck93ug7vy000edsyg4i2f2psi" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2016-03-14-Database-Migration-with-DbUp-and-VSTS/" data-id="ck93ug7vy000edsyg4i2f2psi" data-title="Database Migration With DbUp and VSTS" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2016-03-14-Database-Migration-with-DbUp-and-VSTS/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+
+
   
-    
 <nav id="article-nav">
   
     <a href="/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/" id="article-nav-newer" class="article-nav-link-wrap">
@@ -145,8 +164,6 @@ ga('send', 'pageview');
   
 </nav>
 
-  
-</article>
 
 </section>
         
@@ -209,10 +226,11 @@ ga('send', 'pageview');
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2020 Johan Classon<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
+
     </div>
     <nav id="mobile-nav">
   
@@ -222,20 +240,33 @@ ga('send', 'pageview');
   
 </nav>
     
+<script>
+  var disqus_shortname = 'johanclasson';
+  
+  var disqus_url = 'https://blog.classon.eu/2016-03-14-Database-Migration-with-DbUp-and-VSTS/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.async = true;
+    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
 
 
   
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script src="/fancybox/jquery.fancybox.min.js"></script>
 
 
 
 
 <script src="/js/script.js"></script>
+
 
 
 

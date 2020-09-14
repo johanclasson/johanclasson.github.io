@@ -3,23 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-<!-- Google Analytics -->
-<script type="text/javascript">
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163865120-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-ga('create', 'UA-163865120-1', 'auto');
-ga('send', 'pageview');
-
+  gtag('config', 'UA-163865120-1');
 </script>
 <!-- End Google Analytics -->
 
-
   
   <title>Johan Classon Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta property="og:type" content="website">
 <meta property="og:title" content="Johan Classon Blog">
 <meta property="og:url" content="https://blog.classon.eu/index.html">
@@ -32,15 +29,22 @@ ga('send', 'pageview');
     <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="shortcut icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
   
   
 <link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 <body>
   <div id="container">
@@ -75,13 +79,14 @@ ga('send', 'pageview');
     </div>
   </div>
 </header>
+
       <div class="outer">
         <section id="main">
   
-    <article id="post-2019-05-31-Release-Notes-with-Azure-DevOps" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2019-05-31-Release-Notes-with-Azure-DevOps" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2019-05-31-Release-Notes-with-Azure-DevOps/" class="article-date">
-  <time datetime="2019-05-30T22:00:00.000Z" itemprop="datePublished">2019-05-31</time>
+  <time class="dt-published" datetime="2019-05-30T22:00:00.000Z" itemprop="datePublished">2019-05-31</time>
 </a>
     
   </div>
@@ -92,13 +97,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
+      <a class="p-name article-title" href="/2019-05-31-Release-Notes-with-Azure-DevOps/">Release Notes With Azure DevOps</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>The process that suites your team best might be different from what might be best for someone else. In this blog post, I would like to share how you can construct release notes with Azure DevOps in a nice ordered fashion.</p>
 <p>When you need to publish release notes you might be facing difficulties such as:</p>
@@ -150,20 +155,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2019-05-31-Release-Notes-with-Azure-DevOps/" data-id="ck93prm0p0007u0yg30jm8h3q" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2019-05-31-Release-Notes-with-Azure-DevOps/" data-id="ck93prm0p0007u0yg30jm8h3q" data-title="Release Notes With Azure DevOps" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2019-05-31-Release-Notes-with-Azure-DevOps/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/" class="article-date">
-  <time datetime="2018-11-28T23:00:00.000Z" itemprop="datePublished">2018-11-29</time>
+  <time class="dt-published" datetime="2018-11-28T23:00:00.000Z" itemprop="datePublished">2018-11-29</time>
 </a>
     
   </div>
@@ -174,13 +185,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
+      <a class="p-name article-title" href="/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/">Asynchronously Wait for Task to Complete With Timeout</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>I was recently working at an async method which could possibly hang if some dependent stuff did not happen. To prevent the method from hanging, I wanted to implement some kind of timeout. Now, how can I make a task abort, given the following method signature?</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SomeClient</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task <span class="title">DoStuffAsync</span>(<span class="params">CancellationToken? ct = <span class="literal">null</span></span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -219,20 +230,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/" data-id="ck93puyfp00006sygb3y36uth" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/" data-id="ck93puyfp00006sygb3y36uth" data-title="Asynchronously Wait for Task to Complete With Timeout" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2018-11-29-Asynchronously-Wait-for-Task-to-Complete-with-Timeout/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2018-06-29-Get-started-with-invisible-reCAPTCHA" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2018-06-29-Get-started-with-invisible-reCAPTCHA" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/" class="article-date">
-  <time datetime="2018-06-28T22:00:00.000Z" itemprop="datePublished">2018-06-29</time>
+  <time class="dt-published" datetime="2018-06-28T22:00:00.000Z" itemprop="datePublished">2018-06-29</time>
 </a>
     
   </div>
@@ -243,13 +260,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
+      <a class="p-name article-title" href="/2018-06-29-Get-started-with-invisible-reCAPTCHA/">Get Started With Invisible reCAPTCHA</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>To prevent software from posting forms on websites (and nowadays even on mobile apps), there is this <strong>C</strong>ompletely <strong>A</strong>utomated <strong>P</strong>ublic <strong>T</strong>uring test to tell <strong>C</strong>omputers and <strong>H</strong>umans <strong>A</strong>part, also known as CAPTCHA.</p>
 <p>When I think about CAPTCHAs, I relate to trying to read distorted letters. I don?t know how you react, but I really dislike when I am forced to solve those. Lately I have seen a few variants such as differentiating cats from dogs, picking out road signs or other objects in more or less obscure images. Although I find them to be much more pleasant, I still think that they are a PITA.</p>
@@ -267,20 +284,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2018-06-29-Get-started-with-invisible-reCAPTCHA/" data-id="ck93ug7w1000jdsygeuv4ay8v" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2018-06-29-Get-started-with-invisible-reCAPTCHA/" data-id="ck93ug7w1000jdsygeuv4ay8v" data-title="Get Started With Invisible reCAPTCHA" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2018-06-29-Get-started-with-invisible-reCAPTCHA/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2018-05-09-Handle-Secrets-with-.NET-Core" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2018-05-09-Handle-Secrets-with-.NET-Core" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2018-05-09-Handle-Secrets-with-.NET-Core/" class="article-date">
-  <time datetime="2018-05-08T22:00:00.000Z" itemprop="datePublished">2018-05-09</time>
+  <time class="dt-published" datetime="2018-05-08T22:00:00.000Z" itemprop="datePublished">2018-05-09</time>
 </a>
     
   </div>
@@ -291,13 +314,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
+      <a class="p-name article-title" href="/2018-05-09-Handle-Secrets-with-.NET-Core/">Handle Secrets With .NET Core</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>Have you ever checked in a configuration file with a secret? Now is the time for you to do something better. In this post, I will show four convenient ways in which configuration secrets can be stored outside of your source code repository.</p>
 <h4 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR"></a>TL;DR</h4><h5 id="NuGet-package-Microsoft-Extensions-Configuration-EnvironmentVariables"><a href="#NuGet-package-Microsoft-Extensions-Configuration-EnvironmentVariables" class="headerlink" title="NuGet-package Microsoft.Extensions.Configuration.EnvironmentVariables:"></a>NuGet-package Microsoft.Extensions.Configuration.EnvironmentVariables:</h5><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span> secret = builder</span><br><span class="line">    .AddEnvironmentVariables(prefix)</span><br><span class="line">    .Build()[key];</span><br></pre></td></tr></table></figure>
@@ -395,20 +418,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2018-05-09-Handle-Secrets-with-.NET-Core/" data-id="ck93ug7w1000idsyg02udeo56" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2018-05-09-Handle-Secrets-with-.NET-Core/" data-id="ck93ug7w1000idsyg02udeo56" data-title="Handle Secrets With .NET Core" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2018-05-09-Handle-Secrets-with-.NET-Core/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/" class="article-date">
-  <time datetime="2017-02-09T23:00:00.000Z" itemprop="datePublished">2017-02-10</time>
+  <time class="dt-published" datetime="2017-02-09T23:00:00.000Z" itemprop="datePublished">2017-02-10</time>
 </a>
     
   </div>
@@ -419,13 +448,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
+      <a class="p-name article-title" href="/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/">Creating ARM Service Endpoints From Within VSTS</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>First, here is some background about what Visual Studio Team Services (VSTS) can do concerning Azure Resource Manager (ARM). </p>
 <p>As you probably know, Releases in VSTS has the capability to deploy build artifacts to subscriptions in Azure. Releases are configured through a list of tasks that performs the actual work, such as for example creating infrastructure with ARM-templates, or web-deploying applications to App Services.</p>
@@ -458,20 +487,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/" data-id="ck93ug7w2000kdsyg572jcw1g" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/" data-id="ck93ug7w2000kdsyg572jcw1g" data-title="Creating ARM Service Endpoints From Within VSTS" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2017-02-10-Creating-ARM-Service-Endpoints-from-Within-VSTS/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2016-11-14-Implementing-Custom-Tasks-in-VSTS" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2016-11-14-Implementing-Custom-Tasks-in-VSTS" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2016-11-14-Implementing-Custom-Tasks-in-VSTS/" class="article-date">
-  <time datetime="2016-11-13T23:00:00.000Z" itemprop="datePublished">2016-11-14</time>
+  <time class="dt-published" datetime="2016-11-13T23:00:00.000Z" itemprop="datePublished">2016-11-14</time>
 </a>
     
   </div>
@@ -482,13 +517,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016-11-14-Implementing-Custom-Tasks-in-VSTS/">Implementing Custom Tasks in VSTS</a>
+      <a class="p-name article-title" href="/2016-11-14-Implementing-Custom-Tasks-in-VSTS/">Implementing Custom Tasks in VSTS</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>I think that one of the strengths of the build and release system in Visual Studio Team Services (VSTS) is the large variety of tasks that is available. If you ever want a task that does something that the default tasks can’t do, chances are high that someone else has made a task for just that purpose already, and that it’s ready to be installed from the <a href="https://marketplace.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Marketplace</a>.</p>
 <p>But sometimes you might be out of luck, and you have to make the work yourself. What now?</p>
@@ -542,20 +577,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2016-11-14-Implementing-Custom-Tasks-in-VSTS/" data-id="ck93ug7w0000hdsyghhagd9fu" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2016-11-14-Implementing-Custom-Tasks-in-VSTS/" data-id="ck93ug7w0000hdsyghhagd9fu" data-title="Implementing Custom Tasks in VSTS" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2016-11-14-Implementing-Custom-Tasks-in-VSTS/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2016-09-02-Migrating-a-GitHub-Repository-to-VSTS" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2016-09-02-Migrating-a-GitHub-Repository-to-VSTS" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/" class="article-date">
-  <time datetime="2016-09-01T22:00:00.000Z" itemprop="datePublished">2016-09-02</time>
+  <time class="dt-published" datetime="2016-09-01T22:00:00.000Z" itemprop="datePublished">2016-09-02</time>
 </a>
     
   </div>
@@ -566,13 +607,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/">Migrating a GitHub Repository to VSTS</a>
+      <a class="p-name article-title" href="/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/">Migrating a GitHub Repository to VSTS</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>Regarding migrations, I have previous experience with migrating on premise Team Foundation Servers (TFS) to Visual Studio Team Services (VSTS). Those times I used tools such as the <a href="http://opshub.com/products/opshub-visual-studio-migration-utility/" target="_blank" rel="noopener">OpsHub Visual Studio Migration Utility</a> for copying work items and <a href="https://github.com/git-tfs/git-tfs" target="_blank" rel="noopener">Git TFS</a> for migrating source code.</p>
 <p>Yes, you are right. The OpsHub utility can migrate source code as well. But since I’m a fan of Git I thought that I could do the TFVC to Git conversion when I was about to move anyway.</p>
@@ -605,20 +646,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/" data-id="ck93ug7vz000gdsyg34mze4df" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/" data-id="ck93ug7vz000gdsyg34mze4df" data-title="Migrating a GitHub Repository to VSTS" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2016-09-02-Migrating-a-GitHub-Repository-to-VSTS/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/" class="article-date">
-  <time datetime="2016-03-24T23:00:00.000Z" itemprop="datePublished">2016-03-25</time>
+  <time class="dt-published" datetime="2016-03-24T23:00:00.000Z" itemprop="datePublished">2016-03-25</time>
 </a>
     
   </div>
@@ -629,13 +676,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/">Automatic Testing With an In-Memory Database and EF7</a>
+      <a class="p-name article-title" href="/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/">Automatic Testing With an In-Memory Database and EF7</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>If you have ever written automatic tests that runs against a real database, you might have noticed that the tests ran quite slow. To get around this problem, we instead target some kind of fake database which is kept in-memory.</p>
 <p>To my knowledge, you could have done this in two ways while working with Entity Framework (EF).</p>
@@ -666,20 +713,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/" data-id="ck93ug7vz000fdsyg9dtucm5w" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/" data-id="ck93ug7vz000fdsyg9dtucm5w" data-title="Automatic Testing With an In-Memory Database and EF7" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2016-03-25-Automatic-Testing-with-an-In-memory-Database-and-EF7/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2016-03-14-Database-Migration-with-DbUp-and-VSTS" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2016-03-14-Database-Migration-with-DbUp-and-VSTS" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2016-03-14-Database-Migration-with-DbUp-and-VSTS/" class="article-date">
-  <time datetime="2016-03-13T23:00:00.000Z" itemprop="datePublished">2016-03-14</time>
+  <time class="dt-published" datetime="2016-03-13T23:00:00.000Z" itemprop="datePublished">2016-03-14</time>
 </a>
     
   </div>
@@ -690,13 +743,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016-03-14-Database-Migration-with-DbUp-and-VSTS/">Database Migration With DbUp and VSTS</a>
+      <a class="p-name article-title" href="/2016-03-14-Database-Migration-with-DbUp-and-VSTS/">Database Migration With DbUp and VSTS</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>All too often I find myself in projects where there is no efficient strategy around updating databases. Databases should be able to be migrated to the latest version without too much effort. If it’s too hard, developers will start sharing databases, or even worse, use a test environment database directly. </p>
 <p>If you usually do migrations by comparing the schema of two databases, now is an opportunity for you to do something better. Besides schema and security, a database also consists of data, and data is troublesome. Large tables takes both time and resources to alter. A tool simply cannot generate resource efficient migrations, or for example figure out where the data in that dropped column should go instead.</p>
@@ -715,20 +768,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2016-03-14-Database-Migration-with-DbUp-and-VSTS/" data-id="ck93ug7vy000edsyg4i2f2psi" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2016-03-14-Database-Migration-with-DbUp-and-VSTS/" data-id="ck93ug7vy000edsyg4i2f2psi" data-title="Database Migration With DbUp and VSTS" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2016-03-14-Database-Migration-with-DbUp-and-VSTS/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2016-02-25-Pay-151-SEK-Get-2400-SEK-Back-as-Azure-Credits" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2016-02-25-Pay-151-SEK-Get-2400-SEK-Back-as-Azure-Credits" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2016-02-25-Pay-151-SEK-Get-2400-SEK-Back-as-Azure-Credits/" class="article-date">
-  <time datetime="2016-02-24T23:00:00.000Z" itemprop="datePublished">2016-02-25</time>
+  <time class="dt-published" datetime="2016-02-24T23:00:00.000Z" itemprop="datePublished">2016-02-25</time>
 </a>
     
   </div>
@@ -739,13 +798,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016-02-25-Pay-151-SEK-Get-2400-SEK-Back-as-Azure-Credits/">Pay 151 SEK - Get 2400 SEK Back as Azure Credits (Microsoft Developer Program Benefit)</a>
+      <a class="p-name article-title" href="/2016-02-25-Pay-151-SEK-Get-2400-SEK-Back-as-Azure-Credits/">Pay 151 SEK - Get 2400 SEK Back as Azure Credits (Microsoft Developer Program Benefit)</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>I just recently got an email from Microsoft where they advertised one of their latest Azure drives. They now give monthly credits to all who got a Windows- and/or Windows Phone developer account.</p>
 <p>If you have not got one already, my guess is that you will receive this benefit as well when you register. Just head to <a href="https://dev.windows.com/" target="_blank" rel="noopener">Windows Dev Center</a> and sign up. To get an account you have to pay a minor fee, equivalent to 151 SEK.</p>
@@ -759,13 +818,19 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2016-02-25-Pay-151-SEK-Get-2400-SEK-Back-as-Azure-Credits/" data-id="ck93wim3i0000b4ygeme179jy" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2016-02-25-Pay-151-SEK-Get-2400-SEK-Back-as-Azure-Credits/" data-id="ck93wim3i0000b4ygeme179jy" data-title="Pay 151 SEK - Get 2400 SEK Back as Azure Credits (Microsoft Developer Program Benefit)" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2016-02-25-Pay-151-SEK-Get-2400-SEK-Back-as-Azure-Credits/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
+
+
+
+
 
 
   
@@ -773,7 +838,7 @@ ga('send', 'pageview');
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -837,10 +902,11 @@ ga('send', 'pageview');
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2020 Johan Classon<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
+
     </div>
     <nav id="mobile-nav">
   
@@ -850,20 +916,31 @@ ga('send', 'pageview');
   
 </nav>
     
+<script>
+  var disqus_shortname = 'johanclasson';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.async = true;
+    dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
 
 
   
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script src="/fancybox/jquery.fancybox.min.js"></script>
 
 
 
 
 <script src="/js/script.js"></script>
+
 
 
 

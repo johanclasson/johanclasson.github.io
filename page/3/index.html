@@ -3,23 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-<!-- Google Analytics -->
-<script type="text/javascript">
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163865120-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-ga('create', 'UA-163865120-1', 'auto');
-ga('send', 'pageview');
-
+  gtag('config', 'UA-163865120-1');
 </script>
 <!-- End Google Analytics -->
 
-
   
   <title>Johan Classon Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta property="og:type" content="website">
 <meta property="og:title" content="Johan Classon Blog">
 <meta property="og:url" content="https://blog.classon.eu/page/3/index.html">
@@ -32,15 +29,22 @@ ga('send', 'pageview');
     <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="shortcut icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
   
   
 <link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 <body>
   <div id="container">
@@ -75,13 +79,14 @@ ga('send', 'pageview');
     </div>
   </div>
 </header>
+
       <div class="outer">
         <section id="main">
   
-    <article id="post-2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/" class="article-date">
-  <time datetime="2015-05-15T22:00:00.000Z" itemprop="datePublished">2015-05-16</time>
+  <time class="dt-published" datetime="2015-05-15T22:00:00.000Z" itemprop="datePublished">2015-05-16</time>
 </a>
     
   </div>
@@ -92,13 +97,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/">Avoid Connection String Transforms With SQL Client Alias</a>
+      <a class="p-name article-title" href="/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/">Avoid Connection String Transforms With SQL Client Alias</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>Your reality as a programmer if often that the application that you and your team are writing is going to be run on a number of test- and production environments. The normal case is that these contain computers with different names and/or DNS addresses.</p>
 <p>This means that your application configuration needs to be different on each and every environment. There exists a bunch of tools to solve this problem, and it is usually done with transformation of configuration files. Ouch! </p>
@@ -131,20 +136,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/" data-id="ck93pvv4q00016syg414jg5su" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/" data-id="ck93pvv4q00016syg414jg5su" data-title="Avoid Connection String Transforms With SQL Client Alias" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-05-16-Avoid-Connection-String-Transforms-with-SQL-Client-Alias/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/" class="article-date">
-  <time datetime="2015-05-11T22:00:00.000Z" itemprop="datePublished">2015-05-12</time>
+  <time class="dt-published" datetime="2015-05-11T22:00:00.000Z" itemprop="datePublished">2015-05-12</time>
 </a>
     
   </div>
@@ -155,13 +166,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/">Hidden Capabilities of PowerShell ISE IntelliSense</a>
+      <a class="p-name article-title" href="/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/">Hidden Capabilities of PowerShell ISE IntelliSense</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>I do not program in PowerShell daily, but at least once or twice a week. Even though I am far from an expert on the matter, I would like to think of myself as a guy that knows the available commands. </p>
 <p>Normally I have used the PowerShell ISE that comes bundled with Windows Management Framework to edit my scripts. As of late I have been looking around for another IDE, but have not found any that I feel lives up to my expectations.</p>
@@ -184,20 +195,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/" data-id="ck93ug7vp0001dsyge0dc8rdx" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/" data-id="ck93ug7vp0001dsyge0dc8rdx" data-title="Hidden Capabilities of PowerShell ISE IntelliSense" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-05-12-Hidden-Capabilities-of-PowerShell-ISE-IntelliSense/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-05-06-WCF-Service-Hosting-made-Easy" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-05-06-WCF-Service-Hosting-made-Easy" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-05-06-WCF-Service-Hosting-made-Easy/" class="article-date">
-  <time datetime="2015-05-05T22:00:00.000Z" itemprop="datePublished">2015-05-06</time>
+  <time class="dt-published" datetime="2015-05-05T22:00:00.000Z" itemprop="datePublished">2015-05-06</time>
 </a>
     
   </div>
@@ -208,13 +225,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-05-06-WCF-Service-Hosting-made-Easy/">WCF Service Hosting Made Easy</a>
+      <a class="p-name article-title" href="/2015-05-06-WCF-Service-Hosting-made-Easy/">WCF Service Hosting Made Easy</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>I often hear that WCF is hard to work with because it needs so much configuration. That might have been true in .Net 3.5, but since .Net 4.0 <code>&lt;serviceActivations&gt;</code> has been around to make our lives easier. Today, .Net 4.0 is not far from the Stone Age… So I am surprised that this is still an issue.</p>
 <p>To get started simply:</p>
@@ -255,20 +272,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-05-06-WCF-Service-Hosting-made-Easy/" data-id="ck93ug7vq0002dsyg5wpkdyvc" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-05-06-WCF-Service-Hosting-made-Easy/" data-id="ck93ug7vq0002dsyg5wpkdyvc" data-title="WCF Service Hosting Made Easy" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-05-06-WCF-Service-Hosting-made-Easy/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-05-05-Dirty-Harry-Planning-with-TFS" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-05-05-Dirty-Harry-Planning-with-TFS" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-05-05-Dirty-Harry-Planning-with-TFS/" class="article-date">
-  <time datetime="2015-05-04T22:00:00.000Z" itemprop="datePublished">2015-05-05</time>
+  <time class="dt-published" datetime="2015-05-04T22:00:00.000Z" itemprop="datePublished">2015-05-05</time>
 </a>
     
   </div>
@@ -279,13 +302,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-05-05-Dirty-Harry-Planning-with-TFS/">Dirty Harry Planning With TFS</a>
+      <a class="p-name article-title" href="/2015-05-05-Dirty-Harry-Planning-with-TFS/">Dirty Harry Planning With TFS</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>Planning is hard. If you overestimate your ability to beforehand know details of the future, your planning will fail. Even if you only plan for a two week iteration. Like Harry Callahan said in Magnum Force, <a href="https://www.youtube.com/watch?v=_VrFV5r8cs0" target="_blank" rel="noopener">?a man’s got to know his limitations?</a>.</p>
 <h2 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h2><p>This article is based on the Scrum Process Template, since I think it is the most popular one.</p>
@@ -344,13 +367,19 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/" data-id="ck93ug7vn0000dsyg4uqg67qv" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/" data-id="ck93ug7vn0000dsyg4uqg67qv" data-title="Dirty Harry Planning With TFS" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-05-05-Dirty-Harry-Planning-with-TFS/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
+
+
+
+
 
 
   
@@ -358,7 +387,7 @@ ga('send', 'pageview');
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/2/">Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
   </nav>
 
 </section>
@@ -422,10 +451,11 @@ ga('send', 'pageview');
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2020 Johan Classon<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
+
     </div>
     <nav id="mobile-nav">
   
@@ -435,20 +465,31 @@ ga('send', 'pageview');
   
 </nav>
     
+<script>
+  var disqus_shortname = 'johanclasson';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.async = true;
+    dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
 
 
   
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script src="/fancybox/jquery.fancybox.min.js"></script>
 
 
 
 
 <script src="/js/script.js"></script>
+
 
 
 

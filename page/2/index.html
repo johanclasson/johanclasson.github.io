@@ -3,23 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-<!-- Google Analytics -->
-<script type="text/javascript">
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163865120-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-ga('create', 'UA-163865120-1', 'auto');
-ga('send', 'pageview');
-
+  gtag('config', 'UA-163865120-1');
 </script>
 <!-- End Google Analytics -->
 
-
   
   <title>Johan Classon Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta property="og:type" content="website">
 <meta property="og:title" content="Johan Classon Blog">
 <meta property="og:url" content="https://blog.classon.eu/page/2/index.html">
@@ -32,15 +29,22 @@ ga('send', 'pageview');
     <link rel="alternate" href="/atom.xml" title="Johan Classon Blog" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="shortcut icon" href="/favicon.png">
   
   
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
   
   
 <link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 4.2.0"></head>
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.1.1"></head>
 
 <body>
   <div id="container">
@@ -75,13 +79,14 @@ ga('send', 'pageview');
     </div>
   </div>
 </header>
+
       <div class="outer">
         <section id="main">
   
-    <article id="post-2016-02-22-How-to-use-Moq-with-.NET-Core-Apps" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2016-02-22-How-to-use-Moq-with-.NET-Core-Apps" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2016-02-22-How-to-use-Moq-with-.NET-Core-Apps/" class="article-date">
-  <time datetime="2016-02-21T23:00:00.000Z" itemprop="datePublished">2016-02-22</time>
+  <time class="dt-published" datetime="2016-02-21T23:00:00.000Z" itemprop="datePublished">2016-02-22</time>
 </a>
     
   </div>
@@ -92,13 +97,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016-02-22-How-to-use-Moq-with-.NET-Core-Apps/">How to Use Moq With .NET Core Apps</a>
+      <a class="p-name article-title" href="/2016-02-22-How-to-use-Moq-with-.NET-Core-Apps/">How to Use Moq With .NET Core Apps</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>Writing <a href="http://research.microsoft.com/apps/mobile/news.aspx?post=%2Fen-us%2Fnews%2Ffeatures%2Fnagappan-100609.aspx" target="_blank" rel="noopener">automatic tests is crucial if you care about producing code with good quality</a>. And why shouldn’t you! Yes, writing tests takes time, but the effort will soon be repaid. At least if the code is going to be around for a while. Have you ever been in a project where no one dares to refactor code since it is without coverage? Come on, be a <a href="http://blog.cleancoder.com/uncle-bob/2015/11/18/TheProgrammersOath.html" target="_blank" rel="noopener">Software Professional</a>!</p>
 <p>Enough said about that…</p>
@@ -121,20 +126,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2016-02-22-How-to-use-Moq-with-.NET-Core-Apps/" data-id="ck93ug7vy000cdsyg1iry8g6f" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2016-02-22-How-to-use-Moq-with-.NET-Core-Apps/" data-id="ck93ug7vy000cdsyg1iry8g6f" data-title="How to Use Moq With .NET Core Apps" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2016-02-22-How-to-use-Moq-with-.NET-Core-Apps/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/" class="article-date">
-  <time datetime="2015-12-13T23:00:00.000Z" itemprop="datePublished">2015-12-14</time>
+  <time class="dt-published" datetime="2015-12-13T23:00:00.000Z" itemprop="datePublished">2015-12-14</time>
 </a>
     
   </div>
@@ -145,13 +156,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/">Automatically Stop Azure Resource Manager VMs</a>
+      <a class="p-name article-title" href="/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/">Automatically Stop Azure Resource Manager VMs</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>A question that I get fairly often is how to automatically stop virtual machines in Azure so that they get deallocated and practically does not cost anything. There are many ways to do this, and in this blog post, I am going to describe how to do it with Azure Automation Runbooks.</p>
 <p>The virtual machines that are best suited to automate starting and stopping of, are the ones that does not need to give a response quickly. Test environments, machines with background worker roles, and build infrastructure are some good examples. Production web servers are not, at least not by automation runbooks. Im sure you get that it is wiser to rely on the autoscaling load balancing for those servers instead.</p>
@@ -187,20 +198,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/" data-id="ck93ug7vx000bdsyg458be8ra" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/" data-id="ck93ug7vx000bdsyg458be8ra" data-title="Automatically Stop Azure Resource Manager VMs" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-12-14-Automatically-Stop-Azure-Resource-Manager-VMs/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-12-10-Fight-Technical-Debt-with-SonarQube" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-12-10-Fight-Technical-Debt-with-SonarQube" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-12-10-Fight-Technical-Debt-with-SonarQube/" class="article-date">
-  <time datetime="2015-12-09T23:00:00.000Z" itemprop="datePublished">2015-12-10</time>
+  <time class="dt-published" datetime="2015-12-09T23:00:00.000Z" itemprop="datePublished">2015-12-10</time>
 </a>
     
   </div>
@@ -211,13 +228,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-12-10-Fight-Technical-Debt-with-SonarQube/">Fight Technical Debt With SonarQube</a>
+      <a class="p-name article-title" href="/2015-12-10-Fight-Technical-Debt-with-SonarQube/">Fight Technical Debt With SonarQube</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>The longer a project continues, the more apparently <em>innocent smells</em> are added to the source code. Eventually, you will be in a swamp which is very hard to get out of. Technical debt is a devious thing that sneaks up on you.</p>
 <p>How would you like it if check-ins with smelly code are rejected automatically? That might be an efficient way to battle some of the technical debt anyway.</p>
@@ -271,20 +288,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-12-10-Fight-Technical-Debt-with-SonarQube/" data-id="ck93ug7vw000adsyg58k50u0b" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-12-10-Fight-Technical-Debt-with-SonarQube/" data-id="ck93ug7vw000adsyg58k50u0b" data-title="Fight Technical Debt With SonarQube" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-12-10-Fight-Technical-Debt-with-SonarQube/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/" class="article-date">
-  <time datetime="2015-11-26T23:00:00.000Z" itemprop="datePublished">2015-11-27</time>
+  <time class="dt-published" datetime="2015-11-26T23:00:00.000Z" itemprop="datePublished">2015-11-27</time>
 </a>
     
   </div>
@@ -295,13 +318,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/">Share Code With Your Own NuGet Feeds</a>
+      <a class="p-name article-title" href="/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/">Share Code With Your Own NuGet Feeds</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>I think most of us are familiar with what NuGet is, and how it can be used to add packages from the official NuGet feed to our projects. We can all agree on that It is a real convenient way of sharing code.</p>
 <p>What is strange is that I seldom find projects that use NuGet to share code within the project. Other more ad-hoc solutions are used instead. Have you ever opened a solution in Visual Studio to find that one of the projects that is listed in the solution is also included in an other solution? If you have, you might also have suffered from:</p>
@@ -396,20 +419,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/" data-id="ck93ug7vv0009dsyg3n2wc6bq" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/" data-id="ck93ug7vv0009dsyg3n2wc6bq" data-title="Share Code With Your Own NuGet Feeds" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-11-27-Share-Code-With-Your-Own-NuGet-Feeds/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-11-23-Apply-Semantic-Versioning-to-Assemblies" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-11-23-Apply-Semantic-Versioning-to-Assemblies" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/" class="article-date">
-  <time datetime="2015-11-22T23:00:00.000Z" itemprop="datePublished">2015-11-23</time>
+  <time class="dt-published" datetime="2015-11-22T23:00:00.000Z" itemprop="datePublished">2015-11-23</time>
 </a>
     
   </div>
@@ -420,13 +449,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/">Apply Semantic Versioning to Assemblies</a>
+      <a class="p-name article-title" href="/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/">Apply Semantic Versioning to Assemblies</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>For some time now, Community TFS Build Extensions has provided a <a href="https://tfsbuildextensions.codeplex.com/SourceControl/latest#Scripts/ApplyVersionToAssemblies.ps1" target="_blank" rel="noopener">PowerShell script for automatic versioning of assemblies</a> during a build. This simple script served me well, until I heard about <a href="http://semver.org/" target="_blank" rel="noopener">semantic versioning</a>… To make a long story short, semantic versioning is a standard way to reason about version numbering.</p>
 <p>There are quite a few version patterns that are in use, where Major.Minor.Patch.Build is a common one. This is however not a valid format according to the semantic versioning specification, although I suspect that many relates to that pattern when they talk about versioning.</p>
@@ -484,20 +513,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/" data-id="ck93ug7vv0008dsyg57f4fyqw" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/" data-id="ck93ug7vv0008dsyg57f4fyqw" data-title="Apply Semantic Versioning to Assemblies" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-11-23-Apply-Semantic-Versioning-to-Assemblies/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share/" class="article-date">
-  <time datetime="2015-09-27T22:00:00.000Z" itemprop="datePublished">2015-09-28</time>
+  <time class="dt-published" datetime="2015-09-27T22:00:00.000Z" itemprop="datePublished">2015-09-28</time>
 </a>
     
   </div>
@@ -508,13 +543,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share/">Git Push Only When You Have Something to Share</a>
+      <a class="p-name article-title" href="/2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share/">Git Push Only When You Have Something to Share</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>Git is a source control version system that encourages you to commit changes often. Since you have your own local repository it is not that important that everything that is committed is of premium quality. You can always amend, squach, reword, and even remove commits later before you make your changes public to your team.</p>
 <h2 id="Why-you-should-commit-often"><a href="#Why-you-should-commit-often" class="headerlink" title="Why you should commit often"></a>Why you should commit often</h2><p>It is actually a good practice to commit as soon as you get something right. Even the smallest change that works is best put into history. To commit often brings a few advantages that you would not have anyway:</p>
@@ -543,20 +578,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share/" data-id="ck93ug7vu0007dsygb8t32liy" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share/" data-id="ck93ug7vu0007dsygb8t32liy" data-title="Git Push Only When You Have Something to Share" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-09-28-Git-Push-Only-When-You-Have-Something-to-Share/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-06-26-Pull-Requests-in-TFS-2015" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-06-26-Pull-Requests-in-TFS-2015" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-06-26-Pull-Requests-in-TFS-2015/" class="article-date">
-  <time datetime="2015-06-25T22:00:00.000Z" itemprop="datePublished">2015-06-26</time>
+  <time class="dt-published" datetime="2015-06-25T22:00:00.000Z" itemprop="datePublished">2015-06-26</time>
 </a>
     
   </div>
@@ -567,13 +608,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-06-26-Pull-Requests-in-TFS-2015/">Pull Requests in TFS 2015</a>
+      <a class="p-name article-title" href="/2015-06-26-Pull-Requests-in-TFS-2015/">Pull Requests in TFS 2015</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>We all agree on that doing code review is a good thing. But you need a natural way to conduct code reviews in your team workflow for them to happen. One such is to review all code before it’s pushed to the main branch. In a <a href="http://oss-watch.ac.uk/resources/pullrequest" target="_blank" rel="noopener">distributed version control system such as Git you can create a pull request</a> to initiate such a review. </p>
 <p>GitHub has long supported a nice graphical experience working with pull requests, and TFS and Visual Studio Online (VSO) have just recently caught up. With the release of TFS 2015, they are now in my opinion quite similar in functionally all of them.</p>
@@ -606,20 +647,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-06-26-Pull-Requests-in-TFS-2015/" data-id="ck93ug7vt0006dsyghwsx7f3b" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-06-26-Pull-Requests-in-TFS-2015/" data-id="ck93ug7vt0006dsyghwsx7f3b" data-title="Pull Requests in TFS 2015" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-06-26-Pull-Requests-in-TFS-2015/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-06-21-Build-Your-GitHub-Repository-With-VSO" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-06-21-Build-Your-GitHub-Repository-With-VSO" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-06-21-Build-Your-GitHub-Repository-With-VSO/" class="article-date">
-  <time datetime="2015-06-20T22:00:00.000Z" itemprop="datePublished">2015-06-21</time>
+  <time class="dt-published" datetime="2015-06-20T22:00:00.000Z" itemprop="datePublished">2015-06-21</time>
 </a>
     
   </div>
@@ -630,13 +677,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-06-21-Build-Your-GitHub-Repository-With-VSO/">Build Your GitHub Repository With VSO</a>
+      <a class="p-name article-title" href="/2015-06-21-Build-Your-GitHub-Repository-With-VSO/">Build Your GitHub Repository With VSO</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>If you work with an open source project, or by other means want to share your project with unknown people, GitHub is a great place to store source code. It does not provide any support for building, versioning or deployment, so you have to set these things up somewhere else.</p>
 <p>You can use either Team City, Jenkins or TFS 2015 to host your own build service without so much trouble. If you are not so keen on running your own machine, you can use an online service instead. One of those is Visual Studio Online (VSO), which is my favorite in this case since it’s build agent:</p>
@@ -672,20 +719,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-06-21-Build-Your-GitHub-Repository-With-VSO/" data-id="ck93ug7vt0005dsygbn5e1reu" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-06-21-Build-Your-GitHub-Repository-With-VSO/" data-id="ck93ug7vt0005dsygbn5e1reu" data-title="Build Your GitHub Repository With VSO" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-06-21-Build-Your-GitHub-Repository-With-VSO/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-06-01-Hyper-V-Environment-Templating" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-06-01-Hyper-V-Environment-Templating" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-06-01-Hyper-V-Environment-Templating/" class="article-date">
-  <time datetime="2015-05-31T22:00:00.000Z" itemprop="datePublished">2015-06-01</time>
+  <time class="dt-published" datetime="2015-05-31T22:00:00.000Z" itemprop="datePublished">2015-06-01</time>
 </a>
     
   </div>
@@ -696,13 +749,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-06-01-Hyper-V-Environment-Templating/">Hyper-v Environment Templating</a>
+      <a class="p-name article-title" href="/2015-06-01-Hyper-V-Environment-Templating/">Hyper-v Environment Templating</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>Have you ever felt the need to have a test environment set up on your personal computer? Or perhaps to have an automated way to set up an environment in your Continuous Integration workflow? If it’s done manually, this is a tedious and I believe often error prone activity. But if it’s automated through for example my script demonstrated below, you can have your new virtual machines starting in just seconds.</p>
 <p>I have made a <a href="https://github.com/johanclasson/PowerShell/tree/master/HyperV" target="_blank" rel="noopener">PowerShell Module</a> that contains a function that creates virtual-networks and computers in Hyper-V according to an XML-configuration. It’s idempotent enough so that it does not try to create something that is already there.</p>
@@ -772,20 +825,26 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-06-01-Hyper-V-Environment-Templating/" data-id="ck93ug7vs0004dsyg0svi8y7q" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-06-01-Hyper-V-Environment-Templating/" data-id="ck93ug7vs0004dsyg0svi8y7q" data-title="Hyper-v Environment Templating" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-06-01-Hyper-V-Environment-Templating/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
 
 
+
+
+
+
   
-    <article id="post-2015-05-27-Gör-ditt-nästa-certifieringstest-för-Microsoft-från-din-egen-dator!" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2015-05-27-Gör-ditt-nästa-certifieringstest-för-Microsoft-från-din-egen-dator!" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2015-05-27-G%C3%B6r-ditt-n%C3%A4sta-certifieringstest-f%C3%B6r-Microsoft-fr%C3%A5n-din-egen-dator!/" class="article-date">
-  <time datetime="2015-05-26T22:00:00.000Z" itemprop="datePublished">2015-05-27</time>
+  <time class="dt-published" datetime="2015-05-26T22:00:00.000Z" itemprop="datePublished">2015-05-27</time>
 </a>
     
   </div>
@@ -796,13 +855,13 @@ ga('send', 'pageview');
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015-05-27-G%C3%B6r-ditt-n%C3%A4sta-certifieringstest-f%C3%B6r-Microsoft-fr%C3%A5n-din-egen-dator!/">Gör Ditt Nästa Certifieringstest För Microsoft Från Din Egen Dator!</a>
+      <a class="p-name article-title" href="/2015-05-27-G%C3%B6r-ditt-n%C3%A4sta-certifieringstest-f%C3%B6r-Microsoft-fr%C3%A5n-din-egen-dator!/">Gör Ditt Nästa Certifieringstest För Microsoft Från Din Egen Dator!</a>
     </h1>
   
 
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+    <div class="e-content article-entry" itemprop="articleBody">
       
         <p>Att göra certifieringstest för Microsoft via tredjepartsleverantörer är krångligt. Särskilt när man bor i en lite mindre stad, så som exempelvis Örebro. Visserligen har vi nyligen fått ett Addskills Testcenter här, men det erbjuder bara att skriva certifieringstest en gång i månaden.</p>
 <p>När Microsoft bytte leverantör av certifieringstest från Prometric till Pearson VUE erbjuds ett nytt sätt att göra proven, nämligen via så kallade <em>Online Proctored Exams</em>. Även om det är lite krångel med att få igång det tekniska är det värt att överväga att göra sina examen på det här sättet. Och då inte bara på grund av förenklad logistik. Kostnaden för ett certifieringstest via Addskills är beroende på ort mellan 2 000 - 3 000 SEK. Gör man det via ett <em>Online Proctored Exam</em> kostar det istället 125 EUR. </p>
@@ -822,13 +881,19 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.classon.eu/2015-05-27-G%C3%B6r-ditt-n%C3%A4sta-certifieringstest-f%C3%B6r-Microsoft-fr%C3%A5n-din-egen-dator!/" data-id="ck93ug7vs0003dsyg3sbhh2aa" class="article-share-link">Share</a>
+      <a data-url="https://blog.classon.eu/2015-05-27-G%C3%B6r-ditt-n%C3%A4sta-certifieringstest-f%C3%B6r-Microsoft-fr%C3%A5n-din-egen-dator!/" data-id="ck93ug7vs0003dsyg3sbhh2aa" data-title="Gör Ditt Nästa Certifieringstest För Microsoft Från Din Egen Dator!" class="article-share-link">Share</a>
+      
+        <a href="https://blog.classon.eu/2015-05-27-G%C3%B6r-ditt-n%C3%A4sta-certifieringstest-f%C3%B6r-Microsoft-fr%C3%A5n-din-egen-dator!/#disqus_thread" class="article-comment-link">Comments</a>
+      
       
       
     </footer>
   </div>
-  
 </article>
+
+
+
+
 
 
   
@@ -836,7 +901,7 @@ ga('send', 'pageview');
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -900,10 +965,11 @@ ga('send', 'pageview');
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2020 Johan Classon<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
+
     </div>
     <nav id="mobile-nav">
   
@@ -913,20 +979,31 @@ ga('send', 'pageview');
   
 </nav>
     
+<script>
+  var disqus_shortname = 'johanclasson';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.async = true;
+    dsq.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
 
 
   
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script src="/fancybox/jquery.fancybox.min.js"></script>
 
 
 
 
 <script src="/js/script.js"></script>
+
 
 
 
